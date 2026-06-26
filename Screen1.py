@@ -207,8 +207,9 @@ label_search = tk.Label(
 )
 label_search.place(x=180, y=25)
  
+
 entry_search = tk.Entry(
-    screen1,
+    screen1, pantalla3,
     width=110,
     font=("Century Gothic", 11)
 )
