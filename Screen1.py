@@ -1,5 +1,6 @@
 import tkinter as tk
-from tkinter import Menu
+from backend1 import *
+import backend1
  
 #Creando la pantalla
 root = tk.Tk()
@@ -39,11 +40,11 @@ button_new_ticket.bind("<Leave>", go_out)
 pantalla2 = tk.Frame(root, bg="#d3d3d3")
  
 #solicitando el numero de ticket
-search = tk.Label(pantalla2, text="ticket number", bg="black", fg="white")
-search.pack(pady=20)
- 
-search_input = tk.Entry(pantalla2)
-search_input.pack(pady=14)
+ID = tk.Label(pantalla2, text="ticket number", bg="black", fg="white")
+ID.pack(pady=20)
+
+ID_input = tk.Entry(pantalla2)
+ID_input.pack(pady=14)
  
 #solcitando el nombre de usuario
 user_name = tk.Label(pantalla2, text="User name:", bg="Black", fg="white")
@@ -51,14 +52,16 @@ user_name.pack(pady=15)
  
 user_name_input = tk.Entry(pantalla2)
 user_name_input.pack(pady=17)
- 
+
 #solicitando tipo de problema
 problem = tk.Label(pantalla2, text="What's your problem?", bg="black", fg="white")
 problem.pack(pady=5)
 problem_input = tk.Entry(pantalla2)
 problem_input.pack(pady=10)
  
-tk.Button(pantalla2,text="Guardar")
+Button_guardar = tk.Button(pantalla2,text="Guardar",command= lambda:(crear_new_ticket(ID_input.get(),user_name_input.get(),problem_input.get())),bg= "Black" , fg = "White")
+Button_guardar.place(x=660,y=315)
+
  
 #creando boton para regresar a ventana principal
 def changescreen2():
@@ -85,13 +88,30 @@ def go_out(event):
  
 button_my_tickets.bind("<Enter>", log_in)
 button_my_tickets.bind("<Leave>", go_out)
- 
+
+#Lugar donde se almacenan los tickets creados
+def mostrar_tickets():
+   
+
+   for datos in backend1.obtener_tickets():
+   
+     texto = (
+       "User: " + datos["User"],
+       "ID: " + datos["ID"],
+       "ISSUE: " + datos["Issue"]
+   )
+
+     my_tickets = tk.Label (pantalla3, text= texto)
+     my_tickets.pack()
+
 #creando boton para regresar a ventana principal
 def changescreen5():
     screen1.pack_forget()
     pantalla3.pack(fill="both", expand=True)
     button_back2 = tk.Button(pantalla3, text="←\n", bg="#d3d3d3", fg="black", command=lambda:changescreen4() )
     button_back2.place(x=20, y=50)
+
+    mostrar_tickets()
  
  
 #Creando una pestaña para que el usuario pueda ver sus tickets
