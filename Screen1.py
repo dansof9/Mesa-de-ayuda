@@ -1,6 +1,9 @@
 import tkinter as tk
 from backend1 import *
 import backend1
+import json
+import os
+
  
 #Creando la pantalla
 root = tk.Tk()
@@ -58,9 +61,14 @@ problem = tk.Label(pantalla2, text="What's your problem?", bg="black", fg="white
 problem.pack(pady=5)
 problem_input = tk.Entry(pantalla2)
 problem_input.pack(pady=10)
- 
-Button_guardar = tk.Button(pantalla2,text="Guardar",command= lambda:(crear_new_ticket(ID_input.get(),user_name_input.get(),problem_input.get())),bg= "Black" , fg = "White")
-Button_guardar.place(x=660,y=315)
+
+save_button = tk.Button(
+    pantalla2,                   
+    text="GUARDAR", 
+    command=lambda: almacenar_en_json(ID_input.get(), user_name_input.get(), problem_input.get())    
+)
+save_button.pack(pady=20)
+
 
  
 #creando boton para regresar a ventana principal
@@ -96,8 +104,8 @@ def mostrar_tickets():
    for datos in backend1.obtener_tickets():
    
      texto = (
-       "User: " + datos["User"],
        "ID: " + datos["ID"],
+       "User: " + datos["User"],
        "ISSUE: " + datos["Issue"]
    )
 

@@ -1,67 +1,40 @@
+import os
 from tkinter import messagebox
+import os
+import json
 
 
 #Creando los tickets.
 
-tickets = []
-contador = 1
 
-def crear_new_ticket (user, ID , issue):
-    global contador 
+def almacenar_en_json (ID, user, issue):
+ 
 
     if user == "" or ID == "" or issue == "":
         messagebox.showerror("Campos Incomletos", "Debe completar todos los campos") 
         return
 
     datos = {
-        "Ticket": contador,
         "ID" : ID,
         "User" : user,
         "Issue": issue
     }
 
-    tickets.append (datos)
-    print(tickets)
-    contador += 1
+  #INCORPORANDO JSON Y LEYENDO SI YA EXISTEN LOS TICKETS
+    tickets_guradados =[] 
 
-    messagebox.showinfo("EXITO" , "Ticket creado correctamente")
+    if os.path.exists("tickets.json"):
+     with open("tickets.json", "r" , encoding="utf-8") as f:
+        try:
 
-def obtener_tickets():
-    return tickets
+            tickets_guardados = json.load(f)
+        except: json.JSONDecodeError 
+        tickets_guardados = []
 
+#ESCRIBIENDO CON JSON
+    tickets_guardados.append(datos) 
 
-    
+    with open("tickets.json", "w", encoding="utf-8") as f:
+       json.dump(tickets_guardados, f ,indent= 4 ,ensure_ascii=False )
 
-    
-
-
-
-
-
-#Creando los tickets.
-
-tickets = []
-contador = 1
-
-def crear_new_ticket (user, ID , issue):
-    global contador 
-
-    if user == "" or ID == "" or issue == "":
-        messagebox.showerror("Campos Incomletos", "Debe completar todos los campos") 
-        return
-
-    datos = {
-        "Ticket": contador,
-        "ID" : ID,
-        "User" : user,
-        "Issue": issue
-    }
-
-    tickets.append (datos)
-    print(tickets)
-    contador += 1
-
-    messagebox.showinfo("EXITO" , "Ticket creado correctamente")
-
-def obtener_tickets():
-    return tickets
+       messagebox.showinfo("EXITO", "Ticket creado y almacenado correctamente")
