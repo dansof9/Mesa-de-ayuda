@@ -73,8 +73,7 @@ def changescreen2():
 #PANTALLA 3
 pantalla3 = tk.Frame(root, bg="#d3d3d3")
  
-#pantalla 3 continuacion ---
- 
+
 #Creando un botón para que el usuario vea sus tickets
 def changescreen4():
     pantalla3.pack_forget()
@@ -125,17 +124,19 @@ label_text1.place(x=0, y=0)
 label_text2 = tk.Label(frame_user_tickets, text="Case", font=("Monserrat Black", 9, "bold"), anchor="center", height=2, width=42, bg="#55638F")
 label_text2.place(x=172, y=0)
  
-label_text3 = tk.Label(frame_user_tickets, text="Category", font=("Monserrat Black", 9, "bold"), anchor="center", height=2, width=20, bg="#55638F")
+label_text3 = tk.Label(frame_user_tickets, text="User", font=("Monserrat Black", 9, "bold"), anchor="center", height=2, width=20, bg="#55638F")
 label_text3.place(x=472, y=0)
  
 label_text4 = tk.Label(frame_user_tickets, text="Creation Date", font=("Monserrat Black", 9, "bold"), anchor="center", height=2, width=26, bg="#55638F")
 label_text4.place(x=618, y=0)
  
-label_text5 = tk.Label(frame_user_tickets, text="Channel", font=("Monserrat Black", 9, "bold"), anchor="center", height=2, width=20, bg="#55638F")
+label_text5 = tk.Label(frame_user_tickets, text="Priority", font=("Monserrat Black", 9, "bold"), anchor="center", height=2, width=20, bg="#55638F")
 label_text5.place(x=806, y=0)
  
-label_text5 = tk.Label(frame_user_tickets, text="Status", font=("Monserrat Black", 9, "bold"), anchor="center", height=2, width=28, bg="#55638F")
-label_text5.place(x=952, y=0)
+label_text5 = tk.Label(frame_user_tickets, text="Status", font=("Monserrat Black", 9, "bold"), anchor="w", padx=16, height=2, width=26, bg="#55638F")
+label_text5.place(x=949, y=0)
+
+
  
  
 #Creando tickets de ejemplo
@@ -158,23 +159,51 @@ label_icon_user = label_icon_user.subsample(2,2)
 label_user = tk.Label(frame_ticket1, image=label_icon_user, bg="#DFD8D8")
 label_user.place(x=464, y=8)
 
-label_category = tk.Label(frame_ticket1, text="Access Control", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_category.place(x=500, y=13)
+label_user = tk.Label(frame_ticket1, text="dansof9", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_user.place(x=500, y=13)
  
 label_icon_date = tk.Label(frame_ticket1, text="25/06/2026 9:14", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
 label_icon_date.place(x=666, y=13)
 
-label_icon_channel = tk.PhotoImage(file="computer.png")
-label_icon_channel = label_icon_channel.subsample(2,2)
-label_channel1 = tk.Label(frame_ticket1, image=label_icon_channel, bg="#DFD8D8")
-label_channel1.place(x=824, y=8)
+
+#Creando el boton para abrir el menu en cascada de priority
+def selecionar_opcion2(texto_selecionado):
+    button_priority.configure(text=f"{texto_selecionado}")
  
-label_channel = tk.Label(frame_ticket1, text="Website", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_channel.place(x=860, y=13)
+def mostrar_menu2():
+    x = button_priority.winfo_rootx()
+    y = button_priority.winfo_rooty() + button_priority.winfo_height()
+    menu_opciones2.post(x, y)
+ 
+button_priority = tk.Button(frame_ticket1, text="Low", command=mostrar_menu2, bg="#00B40F", fg="#000000", width=9, font=("century gothic", 8, "bold"))
+button_priority.place(x=844, y=13)
+ 
+#Creando menu cascada
+menu_opciones2 = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+menu_opciones2.add_command(label="High", command=lambda: selecionar_opcion2("High"))
+menu_opciones2.add_command(label="Medium", command=lambda: selecionar_opcion2("Medium"))
+menu_opciones2.add_command(label="Low", command=lambda: selecionar_opcion2("Low"))
 
-label_status = tk.Label(frame_ticket1, text="Open", bg="#55638F", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
-label_status.place(x=1024, y=13)
+#Creando el boton para abrir el menu en cascada de status
+def selecionar_opcion(texto_selecionado):
+    button_status.configure(text=f"{texto_selecionado}")
+ 
+def mostrar_menu():
+    x = button_status.winfo_rootx()
+    y = button_status.winfo_rooty() + button_status.winfo_height()
+    menu_opciones.post(x, y)
+ 
+button_status = tk.Button(frame_ticket1, text="Open", command=mostrar_menu, bg="#55638F", fg="#DFD8D8", width=9, font=("century gothic", 8, "bold"))
+button_status.place(x=953, y=13)
+ 
+#Creando menu cascada
+menu_opciones = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+menu_opciones.add_command(label="Pendiente", command=lambda: selecionar_opcion("pendiente"))
+menu_opciones.add_command(label="En progreso", command=lambda: selecionar_opcion("En progreso"))
+menu_opciones.add_command(label="Resuelto", command=lambda: selecionar_opcion("Resuelto"))
 
+button_delete = tk.Button(frame_ticket1, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete.place(x=1062, y=13)
 
 frame_ticket2= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
 frame_ticket2.place(x=0, y=79)
@@ -184,10 +213,10 @@ label_icon_wifi = label_icon_wifi.subsample(2,2)
 label_wifi = tk.Label(frame_ticket2, image=label_icon_wifi, bg="#DFD8D8")
 label_wifi.place(x=16, y=8)
 
-label_id = tk.Label(frame_ticket2, text="#TI-000673", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_id.place(x=56, y=13)
+label_id2 = tk.Label(frame_ticket2, text="#TI-000673", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_id2.place(x=56, y=13)
 
-label_icon_problem2 = tk.Label(frame_ticket2, text="Send mail error", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_icon_problem2 = tk.Label(frame_ticket2, text="Connection problems", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
 label_icon_problem2.place(x=276, y=13)
 
 label_icon_user2 = tk.PhotoImage(file="user.png")
@@ -195,19 +224,98 @@ label_icon_user2 = label_icon_user2.subsample(2,2)
 label_user2 = tk.Label(frame_ticket2, image=label_icon_user2, bg="#DFD8D8")
 label_user2.place(x=464, y=8)
 
-label_category2 = tk.Label(frame_ticket2, text="Access Control", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_category2.place(x=500, y=13)
+label_user2 = tk.Label(frame_ticket2, text="Jos10-30ue", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_user2.place(x=500, y=13)
 
 label_icon_date2 = tk.Label(frame_ticket2, text="29/05/2026 11:14", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
 label_icon_date2.place(x=665, y=13)
 
-label_icon_channel2 = tk.PhotoImage(file="computer.png")
-label_icon_channel2 = label_icon_channel.subsample(1,1)
-label_channel2 = tk.Label(frame_ticket2, image=label_icon_channel2, bg="#DFD8D8")
-label_channel2.place(x=824, y=8)
+button_priority2 = tk.Button(frame_ticket2, text="High", bg="#FFD104", fg="#000000", width=8, font=("century gothic", 8, "bold"))
+button_priority2.place(x=844, y=13)
 
-label_channel2 = tk.Label(frame_ticket2, text="Website", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_channel2.place(x=860, y=13)
+button_status2 = tk.Button(frame_ticket2, text="Open", bg="#55638F", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_status2.place(x=953, y=13)
+
+button_delete2 = tk.Button(frame_ticket2, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete2.place(x=1062, y=13)
+
+frame_ticket3= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
+frame_ticket3.place(x=0, y=128)
+
+label_icon_wifi2 = tk.PhotoImage(file="wifi.png")
+label_icon_wifi2 = label_icon_wifi2.subsample(2,2)
+label_wifi2 = tk.Label(frame_ticket3, image=label_icon_wifi, bg="#DFD8D8")
+label_wifi2.place(x=16, y=8)
+
+label_id3 = tk.Label(frame_ticket3, text="#TI-002610", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_id3.place(x=56, y=13)
+
+label_icon_problem3 = tk.Label(frame_ticket3, text="Connection problems", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_icon_problem3.place(x=276, y=13)
+
+label_icon_user3 = tk.PhotoImage(file="user.png")
+label_icon_user3 = label_icon_user2.subsample(2,2)
+label_user3 = tk.Label(frame_ticket3, image=label_icon_user2, bg="#DFD8D8")
+label_user3.place(x=464, y=8)
+
+label_user3 = tk.Label(frame_ticket3, text="Javersols8", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_user3.place(x=500, y=13)
+
+label_icon_date3 = tk.Label(frame_ticket3, text="18/10/2026 11:18", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_icon_date3.place(x=665, y=13)
+
+button_priority3 = tk.Button(frame_ticket3, text="Medium", bg="#FF8E0D", fg="#000000", width=8, font=("century gothic", 8, "bold"))
+button_priority3.place(x=844, y=13)
+
+button_status3 = tk.Button(frame_ticket3, text="Open", bg="#55638F", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_status3.place(x=953, y=13)
+
+button_delete3 = tk.Button(frame_ticket3, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete3.place(x=1062, y=13)
+
+frame_ticket4= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
+frame_ticket4.place(x=0, y=177)
+
+label_icon_padlock = tk.PhotoImage(file="padlock.png")
+label_icon_padlock = label_icon_padlock.subsample(2,2)
+label_padlock2 = tk.Label(frame_ticket4, image=label_icon_padlock, bg="#DFD8D8")
+label_padlock2.place(x=16, y=8)
+
+label_id4 = tk.Label(frame_ticket4, text="#TI-102010", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_id4.place(x=56, y=13)
+
+label_icon_problem4 = tk.Label(frame_ticket4, text="Password problems", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_icon_problem4.place(x=276, y=13)
+
+label_icon_user4 = tk.PhotoImage(file="user.png")
+label_icon_user4 = label_icon_user2.subsample(2,2)
+label_user4 = tk.Label(frame_ticket4, image=label_icon_user2, bg="#DFD8D8")
+label_user4.place(x=464, y=8)
+
+label_user4 = tk.Label(frame_ticket4, text="Metz07", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_user4.place(x=500, y=13)
+
+label_icon_date4 = tk.Label(frame_ticket4, text="03/12/2026 08:18", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+label_icon_date4.place(x=665, y=13)
+
+button_priority4 = tk.Button(frame_ticket4, text="High", bg="#FFD104", fg="#000000", width=8, font=("century gothic", 8, "bold"))
+button_priority4.place(x=844, y=13)
+
+button_status4 = tk.Button(frame_ticket4, text="Open", bg="#55638F", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_status4.place(x=953, y=13)
+
+button_delete4 = tk.Button(frame_ticket4, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete4.place(x=1062, y=13)
+
+frame_pending_tickets = tk.Frame(screen1, bg="#818EB9", width=30, height=11)
+frame_pending_tickets.place(x=180, y=490)
+
+label_icon_clock = tk.PhotoImage(file="clock.png")
+label_clock = tk.Label(
+    frame_pending_tickets,
+    image=label_icon_clock,
+    bg="#818EB9")
+
                          
 #Añadiendo un título para la pantalla
 label_title = tk.Label(screen1,
@@ -227,6 +335,7 @@ label_search = tk.Label(
 )
 label_search.place(x=180, y=25)
  
+
 entry_search = tk.Entry(
     screen1,
     width=110,
@@ -235,12 +344,12 @@ entry_search = tk.Entry(
 entry_search.place(x=180, y=60)
  
 def remove_text(event):
-    if entry_search.get() == "How can we help you?...":
+    if entry_search.get() == "Insert your ticket ID...":
         entry_search.delete(0, tk.END)
 def add_text(event):
     if entry_search.get() == "":
-        entry_search.insert(0, "How can we help you?...")
-entry_search.insert(0, "How can we help you?...")
+        entry_search.insert(0, "Insert your ticket ID...")
+entry_search.insert(0, "Insert your ticket ID...")
 entry_search.bind("<FocusIn>", remove_text)
 entry_search.bind("<FocusOut>", add_text)
 search_icon = tk.PhotoImage(file="search.png")
@@ -248,7 +357,7 @@ search_icon = search_icon.subsample(2, 2)
 button_search = tk.Button(
     screen1,
     image=search_icon,
-    bg="white",
+    bg="#818EB9",
     fg="white",
     borderwidth=0,
     cursor="hand2",
@@ -257,12 +366,14 @@ button_search = tk.Button(
 button_search.place(x=1050, y=56)
  
 def log_in(event):
-    button_search.config(bg="#B4B2B2")
+    button_search.config(bg="#818EB9")
 def go_out(event):
     button_search.config(bg="White")
  
 button_search.bind("<Enter>", log_in)
 button_search.bind("<Leave>", go_out)
+
+
  
  
 root.mainloop()
