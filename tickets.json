@@ -1,7 +1,27 @@
 [
     {
+        "ID": "002",
+        "User": "josue",
+        "Issue": "no sé"
+    },
+    {
         "ID": "001",
-        "User": "omar",
-        "Issue": "he forgot his password"
+        "User": "josue",
+        "Issue": "I forgot my password"
+    },
+    {
+        "ID": "003",
+        "User": "Herrera",
+        "Issue": "i don´t have acces"
+    },
+    {
+        "ID": "004",
+        "User": "osmin",
+        "Issue": "computer issues"
+    },
+    {
+        "ID": "005",
+        "User": "Tercero",
+        "Issue": "i don´thave internet"
     }
 ]

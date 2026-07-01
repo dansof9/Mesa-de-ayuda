@@ -1,8 +1,7 @@
 import tkinter as tk
 from backend1 import *
 import backend1
-import json
-import os
+from tkinter import messagebox
 
  
 #Creando la pantalla
@@ -65,7 +64,16 @@ problem_input.pack(pady=10)
 save_button = tk.Button(
     pantalla2,                   
     text="GUARDAR", 
-    command=lambda: almacenar_en_json(ID_input.get(), user_name_input.get(), problem_input.get())    
+    command=lambda: [
+        almacenar_en_json(ID_input.get(), user_name_input.get(), problem_input.get()),
+    messagebox.showinfo("EXITO" , "Ticket creado y almacenado correctamente") ,
+
+    changescreen1() ,
+
+     ID_input.delete(0, tk.END),
+        user_name_input.delete(0, tk.END),
+        problem_input.delete(0, tk.END)
+        ]
 )
 save_button.pack(pady=20)
 
@@ -97,20 +105,39 @@ def go_out(event):
 button_my_tickets.bind("<Enter>", log_in)
 button_my_tickets.bind("<Leave>", go_out)
 
-#Lugar donde se almacenan los tickets creados
+# Lugar donde se almacenan y muestran los tickets creados en pantalla
 def mostrar_tickets():
-   
+    # 1. LIMPIEZA VISUAL: Buscamos etiquetas viejas en pantalla3 y las destruimos
+    for componente in pantalla3.winfo_children():
+        # Validamos que no sea un botón (para no borrar la flecha de regresar)
+        if isinstance(componente, tk.Label):
+            componente.destroy()
 
-   for datos in backend1.obtener_tickets():
-   
-     texto = (
-       "ID: " + datos["ID"],
-       "User: " + datos["User"],
-       "ISSUE: " + datos["Issue"]
-   )
+    # 2. DIBUJAR: Traemos los datos frescos recién guardados del backend
+    tickets = backend1.obtener_tickets()
 
-     my_tickets = tk.Label (pantalla3, text= texto)
-     my_tickets.pack()
+    if not tickets:
+        lbl_vacio = tk.Label(pantalla3, text="No hay tickets registrados.", bg="#d3d3d3", font=("century gothic", 10))
+        lbl_vacio.pack(pady=20)
+        return
+
+    # 3. CREAR LABELS: Generamos las etiquetas dinámicas por cada ticket
+    for datos in tickets:
+        texto = f"ID: {datos['ID']}   |   User: {datos['User']}   |   ISSUE: {datos['Issue']}"
+        
+        my_tickets = tk.Label(
+            pantalla3, 
+            text=texto, 
+            font=("century gothic", 10), 
+            bg="white", 
+            fg="black", 
+            bd=1, 
+            relief="solid", 
+            padx=15, 
+            pady=8,
+            anchor="w"
+        )
+        my_tickets.pack(fill="x", padx=40, pady=5)
 
 #creando boton para regresar a ventana principal
 def changescreen5():

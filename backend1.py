@@ -1,17 +1,11 @@
 import os
-from tkinter import messagebox
-import os
 import json
+from tkinter import messagebox
 
-
-#Creando los tickets.
-
-
-def almacenar_en_json (ID, user, issue):
- 
-
+#Creando función para almacenar los tickets en JSON
+def almacenar_en_json(ID, user, issue):
     if user == "" or ID == "" or issue == "":
-        messagebox.showerror("Campos Incomletos", "Debe completar todos los campos") 
+        messagebox.showerror("Campos Incompletos", "Debe completar todos los campos") 
         return
 
     datos = {
@@ -19,22 +13,28 @@ def almacenar_en_json (ID, user, issue):
         "User" : user,
         "Issue": issue
     }
-
-  #INCORPORANDO JSON Y LEYENDO SI YA EXISTEN LOS TICKETS
-    tickets_guradados =[] 
-
+#proceso para guardar
+    tickets_guardados = [] 
+#Leyendo los tickets en JSON
     if os.path.exists("tickets.json"):
-     with open("tickets.json", "r" , encoding="utf-8") as f:
-        try:
+        with open("tickets.json", "r", encoding="utf-8") as f:
+            try:
+                tickets_guardados = json.load(f)
+            except json.JSONDecodeError: 
+                tickets_guardados = []
 
-            tickets_guardados = json.load(f)
-        except: json.JSONDecodeError 
-        tickets_guardados = []
-
-#ESCRIBIENDO CON JSON
     tickets_guardados.append(datos) 
 
+#escribeindo en el archivo JSON
     with open("tickets.json", "w", encoding="utf-8") as f:
-       json.dump(tickets_guardados, f ,indent= 4 ,ensure_ascii=False )
+        json.dump(tickets_guardados, f, indent=4, ensure_ascii=False)
 
-       messagebox.showinfo("EXITO", "Ticket creado y almacenado correctamente")
+# NUEVA FUNCIÓN: Sirve para que tu interfaz pueda pedirle los datos al backend
+def obtener_tickets():
+    if not os.path.exists("tickets.json"):
+        return []
+    with open("tickets.json", "r", encoding="utf-8") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return []
