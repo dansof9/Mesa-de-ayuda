@@ -7,7 +7,7 @@ from tkinter import messagebox
 #Creando la pantalla
 root = tk.Tk()
 root.title("Helpdesk")
-root.geometry("800x600")
+root.geometry("1800x1200")
 root.resizable(True,True)
 root.config(bg="#D3D3D3")
  
@@ -41,41 +41,120 @@ button_new_ticket.bind("<Leave>", go_out)
 #PANTALLA 2
 pantalla2 = tk.Frame(root, bg="#d3d3d3")
  
-#solicitando el numero de ticket
-ID = tk.Label(pantalla2, text="ticket number", bg="black", fg="white")
-ID.pack(pady=20)
-
-ID_input = tk.Entry(pantalla2)
-ID_input.pack(pady=14)
+# =======================
+# PANTALLA 2
+# =======================
  
-#solcitando el nombre de usuario
-user_name = tk.Label(pantalla2, text="User name:", bg="Black", fg="white")
-user_name.pack(pady=15)
+pantalla2 = tk.Frame(root, bg="#D3D3D3")
  
-user_name_input = tk.Entry(pantalla2)
-user_name_input.pack(pady=17)
+# Frame principal del formulario
+frame_form = tk.Frame(
+    pantalla2,
+    bg="white",
+    bd=2,
+    relief="groove",
+    width=1200,
+    height=1800
+)
+frame_form.place(x=220, y=80)
+frame_form.pack_propagate(False)
+ 
+# Encabezado
+header = tk.Label(
+    frame_form,
+    text="NEW TICKET",
+    bg="#55638F",
+    fg="white",
+    font=("Century Gothic", 16, "bold"),
+    height=2
+)
+header.pack(fill="x")
+ 
+# Contenido
+contenido = tk.Frame(frame_form, bg="white")
+contenido.pack(pady=20)
+ 
+# Ticket Number
+tk.Label(
+    contenido,
+    text="Ticket Number:",
+    bg="white",
+    font=("Century Gothic",10)
+).grid(row=0, column=0, padx=10, pady=10, sticky="w")
+ 
+search_input = tk.Entry(contenido, width=30)
+search_input.grid(row=0, column=1)
+ 
+# User Name
+tk.Label(
+    contenido,
+    text="User Name:",
+    bg="white",
+    font=("Century Gothic",10)
+).grid(row=1, column=0, padx=10, pady=10, sticky="w")
+ 
+user_name_input = tk.Entry(contenido, width=30)
+user_name_input.grid(row=1, column=1)
+ 
+# Problem
+tk.Label(
+    contenido,
+    text="Problem:",
+    bg="white",
+    font=("Century Gothic",10)
+).grid(row=2, column=0, padx=10, pady=10, sticky="nw")
+ 
+problem_input = tk.Text(
+    contenido,
+    width=30,
+    height=6
+)
+problem_input.grid(row=2, column=1)
 
-#solicitando tipo de problema
-problem = tk.Label(pantalla2, text="What's your problem?", bg="black", fg="white")
-problem.pack(pady=5)
-problem_input = tk.Entry(pantalla2)
-problem_input.pack(pady=10)
+ 
+# Prioridad
+tk.Label(
+    contenido,
+    text="Priority:",
+    bg="white",
+    font=("Century Gothic", 10)
+).grid(row=3, column=0, padx=10, pady=10, sticky="w")
+ 
+priority = tk.StringVar()
+priority.set("Medium")
+ 
+priority_menu = tk.OptionMenu(
+    contenido,
+    priority,
+    "Low",
+    "Medium",
+    "High",
+    "Critical"
+)
+ 
+priority_menu.config(
+    width=27,
+    font=("Century Gothic", 9),
+    bg="white"
+)
+ 
+priority_menu.grid(row=3, column=1, padx=5, pady=10)
 
 save_button = tk.Button(
     pantalla2,                   
     text="GUARDAR", 
     command=lambda: [
-        almacenar_en_json(ID_input.get(), user_name_input.get(), problem_input.get()),
-    messagebox.showinfo("EXITO" , "Ticket creado y almacenado correctamente") ,
+        almacenar_en_json(search_input.get(), user_name_input.get(), problem_input.get()),
+        messagebox.showinfo("EXITO" , "Ticket creado y almacenado correctamente") ,
+        changescreen1()
+    ,
 
-    changescreen1() ,
-
-     ID_input.delete(0, tk.END),
+     search_input.delete(0, tk.END),
         user_name_input.delete(0, tk.END),
         problem_input.delete(0, tk.END)
         ]
 )
-save_button.pack(pady=20)
+save_button.place(x=400, y=500)
 
 
  
