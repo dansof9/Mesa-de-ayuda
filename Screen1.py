@@ -7,7 +7,7 @@ from tkinter import messagebox
 #Creando la pantalla
 root = tk.Tk()
 root.title("Helpdesk")
-root.geometry("1800x1200")
+root.state("zoomed")
 root.resizable(True,True)
 root.config(bg="#D3D3D3")
  
@@ -38,8 +38,10 @@ def go_out(event):
 button_new_ticket.bind("<Enter>", log_in)
 button_new_ticket.bind("<Leave>", go_out)
  
-
-#PANTALLA 2
+# =======================
+# PANTALLA 2
+# =======================
+ 
 pantalla2 = tk.Frame(root, bg="#D3D3D3")
  
 # Frame principal del formulario
@@ -48,152 +50,105 @@ frame_form = tk.Frame(
     bg="white",
     bd=2,
     relief="groove",
-    width=1360,
-    height=700
+    width=1500,
+    height=1800
 )
 frame_form.place(x=0, y=0)
+frame_form.pack_propagate(False)
  
 # Encabezado
 header = tk.Label(
     frame_form,
     text="NEW TICKET",
-    anchor="center",
     bg="#55638F",
     fg="white",
-    font=("Century Gothic",16,"bold"),
-    width=104,
+    font=("Century Gothic", 16, "bold"),
     height=2
 )
-header.place(x=0, y=0)
-
-# Ticket Number
-label_ticket = tk.Label(
-    frame_form,
-    text="Ticket Number:",
-    bg="white",
-    font=("Century Gothic",14)
-)
-label_ticket.place(x=310, y=90)
-
-search_input = tk.Entry(
-    frame_form,
-    width=40,
-    font=("Century Gothic",11),
-    bg="#F5F5F5",
-    fg="#333333",
-    relief="flat",
-    bd=4
-)
-search_input.place(x=550, y=90)
+header.pack(fill="x")
+ 
+# Contenido
+contenido = tk.Frame(frame_form, bg="white")
+contenido.pack(pady=20)
  
 # User Name
-label_user = tk.Label(
-    frame_form,
+tk.Label(
+    contenido,
     text="User Name:",
     bg="white",
-    font=("Century Gothic",14)
-)
-label_user.place(x=310, y=160)
-
-user_name_input = tk.Entry(
-    frame_form,
-    width=40,
-    font=("Century Gothic",11),
-    bg="#F5F5F5",
-    fg="#333333",
-    relief="flat",
-    bd=4
-)
-user_name_input.place(x=550, y=160)
+    font=("Century Gothic",10)
+).grid(row=1, column=0, padx=10, pady=10, sticky="w")
+ 
+user_name_input = tk.Entry(contenido, width=30)
+user_name_input.grid(row=1, column=1)
+ 
 # Problem
-label_problem = tk.Label(
-    frame_form,
+tk.Label(
+    contenido,
     text="Problem:",
     bg="white",
-    font=("Century Gothic",14)
-)
-label_problem.place(x=310, y=220)
-
+    font=("Century Gothic",10)
+).grid(row=2, column=0, padx=10, pady=10, sticky="nw")
+ 
 problem_input = tk.Text(
-    frame_form,
-    width=40,
-    height=8,
-    font=("Century Gothic",11),
-    bg="#F5F5F5",
-    fg="#333333",
-    relief="flat",
-    bd=4,
+    contenido,
+    width=30,
+    height=6
 )
-problem_input.place(x=550, y=220)
+problem_input.grid(row=2, column=1)
+
  
 # Prioridad
-label_priority = tk.Label(
-    frame_form,
+tk.Label(
+    contenido,
     text="Priority:",
     bg="white",
-    font=("Century Gothic",14)
-)
-label_priority.place(x=310, y=400)
-
-priority = tk.StringVar(value="Medium")
-
+    font=("Century Gothic", 10)
+).grid(row=3, column=0, padx=10, pady=10, sticky="w")
+ 
+priority = tk.StringVar()
+priority.set("Medium")
+ 
 priority_menu = tk.OptionMenu(
-    frame_form,
+    contenido,
     priority,
     "Low",
     "Medium",
-    "High",
-    "Critical"
+    "High"
 )
+ 
+priority_menu.config(
+    width=27,
+    font=("Century Gothic", 9),
+    bg="white"
+)
+ 
+priority_menu.grid(row=3, column=1, padx=5, pady=10)
 
-def cambiar_color(*args):
-    colores = {
-        "Low": "#4CAF50",
-        "Medium": "#FFC107",
-        "High": "#FF9800",
-        "Critical": "#F44336"
-    }
-
-    color = colores.get(priority.get(), "white")
-
-    priority_menu.config(
-        bg=color,
-        width=30,
-        font=("Century Gothic",10)
-    )
-
-# Registrando el evento fuera de la función
-priority.trace_add("write", cambiar_color)
-
-# Pintar el color inicial
-cambiar_color()
-
-priority_menu.place(x=550, y=400)
-
-
-#Creando una función para guardar los tickets
 def guardar_ticket():
 
-    almacenar_en_json(
-        search_input.get(),
-        user_name_input.get(),
-        problem_input.get("1.0", tk.END).strip(),
-        priority.get(),
-    )
+    usuario = user_name_input.get()
+    problema = problem_input.get("1.0", "end-1c")
+    prioridad = priority.get()
 
-    messagebox.showinfo(
+    if almacenar_en_json(usuario, problema, prioridad):
+
+     messagebox.showinfo(
         "Éxito",
-        "Ticket creado correctamente"
+        "Ticket guardado correctamente"
     )
 
-    search_input.delete(0, tk.END)
     user_name_input.delete(0, tk.END)
     problem_input.delete("1.0", tk.END)
 
     changescreen1()
 
-save_button = tk.Button(frame_form, text="GUARDAR", command=guardar_ticket, bg="#55638F", fg="white", font=("Century Gothic",11,"bold"), relief="flat", cursor="hand2", width=18, height=2)
-save_button.place(x=550, y=520)
+save_button = tk.Button(
+    pantalla2,
+    text="GUARDAR",
+    command=guardar_ticket
+)
+save_button.place(x=700, y=400)
 
 
  
@@ -201,8 +156,8 @@ save_button.place(x=550, y=520)
 def changescreen2():
     screen1.pack_forget()
     pantalla2.pack(fill="both", expand=True)
-    button_back = tk.Button(pantalla2, text="←\n", bg="#55638F", fg="White", command=lambda:changescreen1() )
-    button_back.place(x=4, y=8)
+    button_back = tk.Button(pantalla2, text="←\n", bg="#d3d3d3", fg="black", command=lambda:changescreen1() )
+    button_back.place(x=40, y=70)
  
 #PANTALLA 3
 pantalla3 = tk.Frame(root, bg="#d3d3d3")
@@ -225,13 +180,13 @@ button_my_tickets.bind("<Leave>", go_out)
 
 # Lugar donde se almacenan y muestran los tickets creados en pantalla
 def mostrar_tickets():
-    # 1. LIMPIEZA VISUAL: Buscamos etiquetas viejas en pantalla3 y las destruimos
+    # Funcion para limpiar mis tickets (eliminando)
     for componente in pantalla3.winfo_children():
-        # Validamos que no sea un botón (para no borrar la flecha de regresar)
+        #evitar que desaparezca el boton para regresar
         if isinstance(componente, tk.Label):
             componente.destroy()
 
-    # 2. DIBUJAR: Traemos los datos frescos recién guardados del backend
+    # Colocando los tickets 
     tickets = backend1.obtener_tickets()
 
     if not tickets:
@@ -239,9 +194,9 @@ def mostrar_tickets():
         lbl_vacio.pack(pady=20)
         return
 
-    # 3. CREAR LABELS: Generamos las etiquetas dinámicas por cada ticket
+    # labels para los tickets
     for datos in tickets:
-        texto = f"ID: {datos['ID']}   |   User: {datos['User']}   |   ISSUE: {datos['Issue']}"
+        texto = f"User: {datos['User']}   |   ISSUE: {datos['Issue']}, Priority: {datos['Priority']}"
         
         my_tickets = tk.Label(
             pantalla3, 
@@ -296,9 +251,8 @@ label_text5.place(x=949, y=0)
 frame_ticket1 = tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
 frame_ticket1.place(x=0, y=30)
  
-label_icon_document = tk.PhotoImage(file="document1_icon.png")
-label_icon_document = label_icon_document.subsample(2,2)
-label_document = tk.Label(frame_ticket1, image=label_icon_document, bg="#DFD8D8")
+
+label_document = tk.Label(frame_ticket1,  bg="#DFD8D8")
 label_document.place(x=16, y=8)
  
 label_icon_id = tk.Label(frame_ticket1, text="#TI-000553", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
@@ -361,9 +315,7 @@ button_delete.place(x=1062, y=13)
 frame_ticket2= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
 frame_ticket2.place(x=0, y=79)
 
-label_icon_wifi = tk.PhotoImage(file="wifi.png")
-label_icon_wifi = label_icon_wifi.subsample(2,2)
-label_wifi = tk.Label(frame_ticket2, image=label_icon_wifi, bg="#DFD8D8")
+label_wifi = tk.Label(frame_ticket2,bg="#DFD8D8")
 label_wifi.place(x=16, y=8)
 
 label_id2 = tk.Label(frame_ticket2, text="#TI-000673", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
@@ -395,9 +347,7 @@ button_delete2.place(x=1062, y=13)
 frame_ticket3= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
 frame_ticket3.place(x=0, y=128)
 
-label_icon_wifi2 = tk.PhotoImage(file="wifi.png")
-label_icon_wifi2 = label_icon_wifi2.subsample(2,2)
-label_wifi2 = tk.Label(frame_ticket3, image=label_icon_wifi, bg="#DFD8D8")
+label_wifi2 = tk.Label(frame_ticket3, bg="#DFD8D8")
 label_wifi2.place(x=16, y=8)
 
 label_id3 = tk.Label(frame_ticket3, text="#TI-002610", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
@@ -429,9 +379,8 @@ button_delete3.place(x=1062, y=13)
 frame_ticket4= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
 frame_ticket4.place(x=0, y=177)
 
-label_icon_padlock = tk.PhotoImage(file="padlock.png")
-label_icon_padlock = label_icon_padlock.subsample(2,2)
-label_padlock2 = tk.Label(frame_ticket4, image=label_icon_padlock, bg="#DFD8D8")
+
+label_padlock2 = tk.Label(frame_ticket4, bg="#DFD8D8")
 label_padlock2.place(x=16, y=8)
 
 label_id4 = tk.Label(frame_ticket4, text="#TI-102010", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
@@ -463,10 +412,8 @@ button_delete4.place(x=1062, y=13)
 frame_pending_tickets = tk.Frame(screen1, bg="#818EB9", width=30, height=11)
 frame_pending_tickets.place(x=180, y=490)
 
-label_icon_clock = tk.PhotoImage(file="clock.png")
 label_clock = tk.Label(
     frame_pending_tickets,
-    image=label_icon_clock,
     bg="#818EB9")
 
                          

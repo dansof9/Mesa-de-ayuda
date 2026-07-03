@@ -3,13 +3,13 @@ import json
 from tkinter import messagebox
 
 #Creando función para almacenar los tickets en JSON
-def almacenar_en_json(ID, user, issue, priority):
-    if user == "" or ID == "" or issue == "" or priority == "":
+def almacenar_en_json(user, issue , priority):
+
+    if user == "" or issue == "":
         messagebox.showerror("Campos Incompletos", "Debe completar todos los campos") 
-        return
+        return False
 
     datos = {
-        "ID" : ID,
         "User" : user,
         "Issue": issue,
         "Priority": priority
@@ -29,6 +29,8 @@ def almacenar_en_json(ID, user, issue, priority):
 #escribeindo en el archivo JSON
     with open("tickets.json", "w", encoding="utf-8") as f:
         json.dump(tickets_guardados, f, indent=4, ensure_ascii=False)
+
+    return True
 
 # NUEVA FUNCIÓN: Sirve para que tu interfaz pueda pedirle los datos al backend
 def obtener_tickets():

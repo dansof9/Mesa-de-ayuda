@@ -1,38 +1,12 @@
 [
     {
-        "ID": "001",
         "User": "josue",
-        "Issue": "no sé"
+        "Issue": "i cant acces",
+        "Priority": "Medium"
     },
     {
-        "ID": "002",
-        "User": "josue",
-        "Issue": "I forgot my password"
-    },
-    {
-        "ID": "003",
-        "User": "Herrera",
-        "Issue": "i don´t have acces"
-    },
-    {
-        "ID": "004",
-        "User": "osmin",
-        "Issue": "computer issues"
-    },
-    {
-        "ID": "005",
-        "User": "Tercero",
-        "Issue": "i don´thave internet"
-    },
-    {
-        "ID": "001",
-        "User": "josue",
-        "Issue": "asdjijbaijdb"
-    },
-    {
-        "ID": "fgfdghsghs",
-        "User": "gsffffhghjg",
-        "Issue": "hdgjhgjkjhkj",
+        "User": "Osmin",
+        "Issue": "I forgot my password",
         "Priority": "High"
     }
 ]
