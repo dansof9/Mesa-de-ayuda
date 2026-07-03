@@ -49,91 +49,127 @@ frame_form = tk.Frame(
     bd=2,
     relief="groove",
     width=1360,
-    height=1800
+    height=700
 )
 frame_form.place(x=0, y=0)
-frame_form.pack_propagate(False)
  
 # Encabezado
 header = tk.Label(
     frame_form,
     text="NEW TICKET",
+    anchor="center",
     bg="#55638F",
     fg="white",
-    font=("Century Gothic", 16, "bold"),
+    font=("Century Gothic",16,"bold"),
+    width=104,
     height=2
 )
-header.pack(fill="x")
- 
-# Contenido
-contenido = tk.Frame(frame_form, bg="white")
-contenido.pack(pady=20)
- 
+header.place(x=0, y=0)
+
 # Ticket Number
-tk.Label(
-    contenido,
+label_ticket = tk.Label(
+    frame_form,
     text="Ticket Number:",
     bg="white",
     font=("Century Gothic",14)
-).grid(row=0, column=0, padx=10, pady=15, sticky="w")
- 
-search_input = tk.Entry(contenido, width=40, font=("Century Gothic",11))
-search_input.grid(row=0, column=1)
+)
+label_ticket.place(x=310, y=90)
+
+search_input = tk.Entry(
+    frame_form,
+    width=40,
+    font=("Century Gothic",11),
+    bg="#F5F5F5",
+    fg="#333333",
+    relief="flat",
+    bd=4
+)
+search_input.place(x=550, y=90)
  
 # User Name
-tk.Label(
-    contenido,
+label_user = tk.Label(
+    frame_form,
     text="User Name:",
     bg="white",
-    font=("Century Gothic",10)
-).grid(row=1, column=0, padx=10, pady=15, sticky="w")
- 
-user_name_input = tk.Entry(contenido, width=30)
-user_name_input.grid(row=1, column=1)
- 
+    font=("Century Gothic",14)
+)
+label_user.place(x=310, y=160)
+
+user_name_input = tk.Entry(
+    frame_form,
+    width=40,
+    font=("Century Gothic",11),
+    bg="#F5F5F5",
+    fg="#333333",
+    relief="flat",
+    bd=4
+)
+user_name_input.place(x=550, y=160)
 # Problem
-tk.Label(
-    contenido,
+label_problem = tk.Label(
+    frame_form,
     text="Problem:",
     bg="white",
-    font=("Century Gothic",10)
-).grid(row=2, column=0, padx=10, pady=15, sticky="nw")
- 
-problem_input = tk.Text(
-    contenido,
-    width=40,
-    height=8
+    font=("Century Gothic",14)
 )
-problem_input.grid(row=2, column=1)
+label_problem.place(x=310, y=220)
 
+problem_input = tk.Text(
+    frame_form,
+    width=40,
+    height=8,
+    font=("Century Gothic",11),
+    bg="#F5F5F5",
+    fg="#333333",
+    relief="flat",
+    bd=4,
+)
+problem_input.place(x=550, y=220)
  
 # Prioridad
-tk.Label(
-    contenido,
+label_priority = tk.Label(
+    frame_form,
     text="Priority:",
     bg="white",
-    font=("Century Gothic", 10)
-).grid(row=3, column=0, padx=10, pady=15, sticky="w")
- 
-priority = tk.StringVar()
-priority.set("Medium")
- 
+    font=("Century Gothic",14)
+)
+label_priority.place(x=310, y=400)
+
+priority = tk.StringVar(value="Medium")
+
 priority_menu = tk.OptionMenu(
-    contenido,
+    frame_form,
     priority,
     "Low",
     "Medium",
     "High",
     "Critical"
 )
- 
-priority_menu.config(
-    width=27,
-    font=("Century Gothic", 9),
-    bg="white"
-)
- 
-priority_menu.grid(row=3, column=1, padx=5, pady=15)
+
+def cambiar_color(*args):
+    colores = {
+        "Low": "#4CAF50",
+        "Medium": "#FFC107",
+        "High": "#FF9800",
+        "Critical": "#F44336"
+    }
+
+    color = colores.get(priority.get(), "white")
+
+    priority_menu.config(
+        bg=color,
+        width=30,
+        font=("Century Gothic",10)
+    )
+
+# Registrando el evento fuera de la función
+priority.trace_add("write", cambiar_color)
+
+# Pintar el color inicial
+cambiar_color()
+
+priority_menu.place(x=550, y=400)
+
 
 #Creando una función para guardar los tickets
 def guardar_ticket():
@@ -157,7 +193,7 @@ def guardar_ticket():
     changescreen1()
 
 save_button = tk.Button(frame_form, text="GUARDAR", command=guardar_ticket, bg="#55638F", fg="white", font=("Century Gothic",11,"bold"), relief="flat", cursor="hand2", width=18, height=2)
-save_button.place(x=400, y=500)
+save_button.place(x=550, y=520)
 
 
  
@@ -165,8 +201,8 @@ save_button.place(x=400, y=500)
 def changescreen2():
     screen1.pack_forget()
     pantalla2.pack(fill="both", expand=True)
-    button_back = tk.Button(pantalla2, text="←\n", bg="#d3d3d3", fg="black", command=lambda:changescreen1() )
-    button_back.place(x=20, y=50)
+    button_back = tk.Button(pantalla2, text="←\n", bg="#55638F", fg="White", command=lambda:changescreen1() )
+    button_back.place(x=4, y=8)
  
 #PANTALLA 3
 pantalla3 = tk.Frame(root, bg="#d3d3d3")
