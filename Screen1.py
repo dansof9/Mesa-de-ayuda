@@ -38,13 +38,8 @@ def go_out(event):
 button_new_ticket.bind("<Enter>", log_in)
 button_new_ticket.bind("<Leave>", go_out)
  
+
 #PANTALLA 2
-pantalla2 = tk.Frame(root, bg="#d3d3d3")
- 
-# =======================
-# PANTALLA 2
-# =======================
- 
 pantalla2 = tk.Frame(root, bg="#D3D3D3")
  
 # Frame principal del formulario
@@ -53,10 +48,10 @@ frame_form = tk.Frame(
     bg="white",
     bd=2,
     relief="groove",
-    width=1200,
+    width=1360,
     height=1800
 )
-frame_form.place(x=220, y=80)
+frame_form.place(x=0, y=0)
 frame_form.pack_propagate(False)
  
 # Encabezado
@@ -79,10 +74,10 @@ tk.Label(
     contenido,
     text="Ticket Number:",
     bg="white",
-    font=("Century Gothic",10)
-).grid(row=0, column=0, padx=10, pady=10, sticky="w")
+    font=("Century Gothic",14)
+).grid(row=0, column=0, padx=10, pady=15, sticky="w")
  
-search_input = tk.Entry(contenido, width=30)
+search_input = tk.Entry(contenido, width=40, font=("Century Gothic",11))
 search_input.grid(row=0, column=1)
  
 # User Name
@@ -91,7 +86,7 @@ tk.Label(
     text="User Name:",
     bg="white",
     font=("Century Gothic",10)
-).grid(row=1, column=0, padx=10, pady=10, sticky="w")
+).grid(row=1, column=0, padx=10, pady=15, sticky="w")
  
 user_name_input = tk.Entry(contenido, width=30)
 user_name_input.grid(row=1, column=1)
@@ -102,12 +97,12 @@ tk.Label(
     text="Problem:",
     bg="white",
     font=("Century Gothic",10)
-).grid(row=2, column=0, padx=10, pady=10, sticky="nw")
+).grid(row=2, column=0, padx=10, pady=15, sticky="nw")
  
 problem_input = tk.Text(
     contenido,
-    width=30,
-    height=6
+    width=40,
+    height=8
 )
 problem_input.grid(row=2, column=1)
 
@@ -118,7 +113,7 @@ tk.Label(
     text="Priority:",
     bg="white",
     font=("Century Gothic", 10)
-).grid(row=3, column=0, padx=10, pady=10, sticky="w")
+).grid(row=3, column=0, padx=10, pady=15, sticky="w")
  
 priority = tk.StringVar()
 priority.set("Medium")
@@ -138,22 +133,30 @@ priority_menu.config(
     bg="white"
 )
  
-priority_menu.grid(row=3, column=1, padx=5, pady=10)
+priority_menu.grid(row=3, column=1, padx=5, pady=15)
 
-save_button = tk.Button(
-    pantalla2,                   
-    text="GUARDAR", 
-    command=lambda: [
-        almacenar_en_json(search_input.get(), user_name_input.get(), problem_input.get()),
-        messagebox.showinfo("EXITO" , "Ticket creado y almacenado correctamente") ,
-        changescreen1()
-    ,
+#Creando una función para guardar los tickets
+def guardar_ticket():
 
-     search_input.delete(0, tk.END),
-        user_name_input.delete(0, tk.END),
-        problem_input.delete(0, tk.END)
-        ]
-)
+    almacenar_en_json(
+        search_input.get(),
+        user_name_input.get(),
+        problem_input.get("1.0", tk.END).strip(),
+        priority.get(),
+    )
+
+    messagebox.showinfo(
+        "Éxito",
+        "Ticket creado correctamente"
+    )
+
+    search_input.delete(0, tk.END)
+    user_name_input.delete(0, tk.END)
+    problem_input.delete("1.0", tk.END)
+
+    changescreen1()
+
+save_button = tk.Button(frame_form, text="GUARDAR", command=guardar_ticket, bg="#55638F", fg="white", font=("Century Gothic",11,"bold"), relief="flat", cursor="hand2", width=18, height=2)
 save_button.place(x=400, y=500)
 
 
