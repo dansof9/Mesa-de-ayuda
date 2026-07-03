@@ -282,42 +282,60 @@ label_user.place(x=500, y=13)
 label_icon_date = tk.Label(frame_ticket1, text="25/06/2026 9:14", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
 label_icon_date.place(x=666, y=13)
 
+#BOTON DE PRIORITY---
 
 #Creando el boton para abrir el menu en cascada de priority
-def selecionar_opcion2(texto_selecionado):
-    button_priority.configure(text=f"{texto_selecionado}")
+def selecionar_opcion2(boton_selecionado2, texto_selecionado2, color_selecionado2):
+    boton_selecionado2.configure(text=f"{texto_selecionado2}", bg=color_selecionado2, activebackground=color_selecionado2)
+
+def mostrar_menu_priority(boton_actual):
+    x = boton_actual.winfo_rootx()
+    y = boton_actual.winfo_rooty() + button_priority.winfo_height()
+    menu_opciones_priority.post(x, y)
  
-def mostrar_menu2():
-    x = button_priority.winfo_rootx()
-    y = button_priority.winfo_rooty() + button_priority.winfo_height()
-    menu_opciones2.post(x, y)
- 
-button_priority = tk.Button(frame_ticket1, text="Low", command=mostrar_menu2, bg="#00B40F", fg="#000000", width=9, font=("century gothic", 8, "bold"))
+#creando menu cascada para todos los botones
+    menu_opciones_priority.entryconfigure(0, command=lambda: selecionar_opcion2(boton_actual, "High", "#FFD104") )
+    menu_opciones_priority.entryconfigure(1, command=lambda: selecionar_opcion2(boton_actual, "Medium","#FF8E0D" ))
+    menu_opciones_priority.entryconfigure(2, command=lambda: selecionar_opcion2(boton_actual, "Low","#00B40F"))
+
+#Creando el boton priority
+button_priority = tk.Button(frame_ticket1, text="low", bg="#00B40F", fg="#000000", width=9, font=("century gothic", 8, "bold"))
 button_priority.place(x=844, y=13)
- 
+button_priority.configure(command=lambda: mostrar_menu_priority(button_priority))
+
+
 #Creando menu cascada
-menu_opciones2 = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
-menu_opciones2.add_command(label="High", command=lambda: selecionar_opcion2("High"))
-menu_opciones2.add_command(label="Medium", command=lambda: selecionar_opcion2("Medium"))
-menu_opciones2.add_command(label="Low", command=lambda: selecionar_opcion2("Low"))
+menu_opciones_priority = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+menu_opciones_priority.add_command(label="High")
+menu_opciones_priority.add_command(label="Medium")
+menu_opciones_priority.add_command(label="Low")
+
+#BOTON DE STATUS---
 
 #Creando el boton para abrir el menu en cascada de status
-def selecionar_opcion(texto_selecionado):
-    button_status.configure(text=f"{texto_selecionado}")
+def selecionar_opcion(boton_selecionado, texto_selecionado, color_selecionado):
+    boton_selecionado.configure(text=f"{texto_selecionado}", bg=color_selecionado, activebackground=color_selecionado)
  
-def mostrar_menu():
-    x = button_status.winfo_rootx()
-    y = button_status.winfo_rooty() + button_status.winfo_height()
-    menu_opciones.post(x, y)
- 
-button_status = tk.Button(frame_ticket1, text="Open", command=mostrar_menu, bg="#55638F", fg="#DFD8D8", width=9, font=("century gothic", 8, "bold"))
+def mostrar_menu_status(boton_actual2):
+    x = boton_actual2.winfo_rootx()
+    y = boton_actual2.winfo_rooty() + button_status.winfo_height()
+    menu_opciones_status.post(x, y)
+
+#creando menu cascada para todos los botones
+    menu_opciones_status.entryconfigure(0, command=lambda: selecionar_opcion(boton_actual2, "Pendiente", "#FFD104") )
+    menu_opciones_status.entryconfigure(1, command=lambda: selecionar_opcion(boton_actual2, "En proceso","#FF8E0D" ))
+    menu_opciones_status.entryconfigure(2, command=lambda: selecionar_opcion(boton_actual2, "Resuelto","#00B40F"))
+
+#Creando boton status
+button_status = tk.Button(frame_ticket1, text="Resuelto", command=mostrar_menu_status, bg="#00B40F", fg="Black", width=9, font=("century gothic", 8, "bold"))
 button_status.place(x=953, y=13)
- 
+button_status.configure(command=lambda: mostrar_menu_status(button_status))
+
 #Creando menu cascada
-menu_opciones = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
-menu_opciones.add_command(label="Pendiente", command=lambda: selecionar_opcion("pendiente"))
-menu_opciones.add_command(label="En progreso", command=lambda: selecionar_opcion("En progreso"))
-menu_opciones.add_command(label="Resuelto", command=lambda: selecionar_opcion("Resuelto"))
+menu_opciones_status = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+menu_opciones_status.add_command(label="Pendiente")
+menu_opciones_status.add_command(label="En proceso")
+menu_opciones_status.add_command(label="Resuelto")
 
 button_delete = tk.Button(frame_ticket1, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
 button_delete.place(x=1062, y=13)
@@ -349,9 +367,11 @@ label_icon_date2.place(x=665, y=13)
 
 button_priority2 = tk.Button(frame_ticket2, text="High", bg="#FFD104", fg="#000000", width=8, font=("century gothic", 8, "bold"))
 button_priority2.place(x=844, y=13)
+button_priority2.configure(command=lambda: mostrar_menu_priority(button_priority2))
 
-button_status2 = tk.Button(frame_ticket2, text="Open", bg="#55638F", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_status2 = tk.Button(frame_ticket2, text="Resuelto", bg="#00B40F", fg="Black", width=8, font=("century gothic", 8, "bold"))
 button_status2.place(x=953, y=13)
+button_status2.configure(command=lambda: mostrar_menu_status(button_status2))
 
 button_delete2 = tk.Button(frame_ticket2, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
 button_delete2.place(x=1062, y=13)
@@ -383,9 +403,11 @@ label_icon_date3.place(x=665, y=13)
 
 button_priority3 = tk.Button(frame_ticket3, text="Medium", bg="#FF8E0D", fg="#000000", width=8, font=("century gothic", 8, "bold"))
 button_priority3.place(x=844, y=13)
+button_priority3.configure(command=lambda: mostrar_menu_priority(button_priority3))
 
-button_status3 = tk.Button(frame_ticket3, text="Open", bg="#55638F", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_status3 = tk.Button(frame_ticket3, text="Resuelto", bg="#00B40F", fg="Black", width=8, font=("century gothic", 8, "bold"))
 button_status3.place(x=953, y=13)
+button_status3.configure(command=lambda: mostrar_menu_status(button_status3))
 
 button_delete3 = tk.Button(frame_ticket3, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
 button_delete3.place(x=1062, y=13)
@@ -417,9 +439,11 @@ label_icon_date4.place(x=665, y=13)
 
 button_priority4 = tk.Button(frame_ticket4, text="High", bg="#FFD104", fg="#000000", width=8, font=("century gothic", 8, "bold"))
 button_priority4.place(x=844, y=13)
+button_priority4.configure(command=lambda: mostrar_menu_priority(button_priority4))
 
-button_status4 = tk.Button(frame_ticket4, text="Open", bg="#55638F", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_status4 = tk.Button(frame_ticket4, text="Resuelto", bg="#00B40F", fg="Black", width=8, font=("century gothic", 8, "bold"))
 button_status4.place(x=953, y=13)
+button_status4.configure(command=lambda: mostrar_menu_status(button_status4))
 
 button_delete4 = tk.Button(frame_ticket4, text="Eliminar", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
 button_delete4.place(x=1062, y=13)
