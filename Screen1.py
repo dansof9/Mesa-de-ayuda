@@ -495,28 +495,93 @@ entry_search = tk.Entry(
     font=("Century Gothic", 11)
 )
 entry_search.place(x=180, y=60)
+
+# Creando una lista de tickets
+tickets = []
+
+for i in range(1, 1001):
+    tickets.append(f"#TI-{i:03}")
+
+#Creando una lista de sugerencias
+listbox = tk.Listbox(
+    screen1,
+    width=110,
+    height=5,
+    font=("Century Gothic", 10)
+)
+
+listbox.place_forget()
+
  
+#Creando una función para buscar tickets
+def buscar(event):
+
+    print("Estoy buscando")
+
+    texto = entry_search.get()
+    listbox.delete(0, tk.END)
+
+    if texto == "" or texto == "Insert your ticket ID...":
+        listbox.place_forget()
+        return
+
+    encontrados = 0
+
+# Buscando coincidencias con los tickets 
+    for ticket in tickets:
+
+        if ticket.lower().startswith(texto.lower()):
+
+            listbox.insert(tk.END, ticket)
+
+            encontrados += 1
+            if encontrados == 5:
+                break
+
+    if encontrados > 0:
+        listbox.place(x=180, y=88)
+    else:
+        listbox.place_forget()
+
+
+def seleccionar(event):
+
+    if listbox.curselection():
+
+        ticket = listbox.get(listbox.curselection())
+
+        entry_search.delete(0, tk.END)
+
+        entry_search.insert(0, ticket)
+
+        listbox.place_forget()
+
+entry_search.bind("<KeyRelease>", buscar)
+listbox.bind("<<ListboxSelect>>", seleccionar)
+
+#Creando una funciones para que el texto del buscador desaparezca
 def remove_text(event):
     if entry_search.get() == "Insert your ticket ID...":
         entry_search.delete(0, tk.END)
 def add_text(event):
     if entry_search.get() == "":
         entry_search.insert(0, "Insert your ticket ID...")
+
 entry_search.insert(0, "Insert your ticket ID...")
 entry_search.bind("<FocusIn>", remove_text)
 entry_search.bind("<FocusOut>", add_text)
-search_icon = tk.PhotoImage(file="search.png")
-search_icon = search_icon.subsample(2, 2)
+
 button_search = tk.Button(
     screen1,
-    image=search_icon,
+    text="Search",
     bg="#818EB9",
-    fg="white",
-    borderwidth=0,
+    fg="Black",
+    borderwidth=1,
     cursor="hand2",
-    relief="flat"
+    height=1,
+    relief="raised"
 )
-button_search.place(x=1050, y=56)
+button_search.place(x=1050, y=58)
  
 def log_in(event):
     button_search.config(bg="#818EB9")
