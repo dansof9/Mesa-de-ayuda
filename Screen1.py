@@ -64,26 +64,6 @@ header = tk.Label(
     height=2
 )
 header.place(x=0, y=0)
-
-# Ticket Number
-label_ticket = tk.Label(
-    frame_form,
-    text="Ticket Number:",
-    bg="white",
-    font=("Century Gothic",14)
-)
-label_ticket.place(x=310, y=90)
-
-search_input = tk.Entry(
-    frame_form,
-    width=40,
-    font=("Century Gothic",11),
-    bg="#F5F5F5",
-    fg="#333333",
-    relief="flat",
-    bd=4
-)
-search_input.place(x=550, y=90)
  
 # User Name
 label_user = tk.Label(
