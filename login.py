@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 
+
 # VENTANA PRINCIPAL DE BIENVENIDA (LAS 2 OPCIONES)
 root = tk.Tk()
 root.title("Bienvenido al sistema")
@@ -77,56 +78,7 @@ btn_enviar_registro.pack(fill="x", padx=40, pady=25, ipady=5)
 
 tk.Button(frame_registro, text="← Volver al inicio", font=("Arial", 9), bg="#ffffff", fg="gray", bd=0, command=regresar_al_menu).pack(pady=10)
 
-# BACKEND
-usuarios_db = {"admin": "1234"}
-
-def ejecutar_login():
-    user = txt_login_user.get().strip()
-    pas = txt_login_pass.get()
-
-    if not user or not pas:
-        messagebox.showwarning("Atención", "Por favor llena todos los campos.")
-        return
-
-    if user in usuarios_db and usuarios_db[user] == pas:
-        messagebox.showinfo("Éxito", f"¡Bienvenido al sistema, {user}!")
-
-        # APAGADO SEGURO
-        root.destroy()
-
-        # Ejecuta Screen1.py
-        __import__("Screen1")
-
-    else:
-        messagebox.showerror("Error", "Usuario o contraseña incorrectos.")
-
-def ejecutar_registro():
- user = txt_reg_user.get().strip()
- pas = txt_reg_pass.get()
- conf = txt_reg_confirm.get()
-
- if not user or not pas or not conf:
-  messagebox.showwarning("Atención", "Todos los campos son obligatorios.")
-  return
- if pas != conf:
-  messagebox.showerror("Error", "Las contraseñas no coinciden.")
-  return
- if user in usuarios_db:
-  messagebox.showerror("Error", "El usuario ya existe.")
-  return
-
- usuarios_db[user] = pas
- messagebox.showinfo("Éxito", "¡Usuario registrado correctamente!")
-
- # Limpiando los campos de texto
- txt_reg_user.delete(0, tk.END)
- txt_reg_pass.delete(0, tk.END)
- txt_reg_confirm.delete(0, tk.END)
-
- frame_registro.place_forget()
- abrir_login()
-
-btn_enviar_login.config(command=ejecutar_login)
-btn_enviar_registro.config(command=ejecutar_registro)
-
+print("Botón login:", btn_enviar_login)
+print("Botón registro:", btn_enviar_registro)
+import backend_login
 root.mainloop()

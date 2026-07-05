@@ -156,15 +156,22 @@ def guardar_ticket():
 
     if almacenar_en_json(usuario, problema, prioridad):
 
-     messagebox.showinfo(
-        "Éxito",
-        "Ticket guardado correctamente"
-    )
+        messagebox.showinfo(
+            "Éxito",
+            "Ticket guardado correctamente"
+        )
 
-    user_name_input.delete(0, tk.END)
-    problem_input.delete("1.0", tk.END)
+        user_name_input.delete(0, tk.END)
+        problem_input.delete("1.0", tk.END)
 
-    changescreen1()
+        changescreen1()
+
+    else:
+        # Si faltan campos, solo limpiar el formulario
+        user_name_input.delete(0, tk.END)
+        problem_input.delete("1.0", tk.END)
+
+    
 
 #Creando el botón para guardar 
 save_button = tk.Button(frame_form, text="GUARDAR", command=guardar_ticket, bg="#55638F", fg="white", font=("Century Gothic",11,"bold"), relief="flat", cursor="hand2", width=18, height=2)
