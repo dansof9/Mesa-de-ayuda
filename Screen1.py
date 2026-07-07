@@ -39,12 +39,13 @@ button_new_ticket.bind("<Enter>", log_in)
 button_new_ticket.bind("<Leave>", go_out)
  
 #PANTALLA 2
-pantalla2 = tk.Frame(root, bg="#D3D3D3")
+#PANTALLA 2
+pantalla2 = tk.Frame(root, bg="#F3F5F7")
  
 # Frame principal del formulario
 frame_form = tk.Frame(
     pantalla2,
-    bg="white",
+    bg="#F3F5F7",
     bd=2,
     relief="groove",
     width=1360,
@@ -61,15 +62,20 @@ header = tk.Label(
     fg="white",
     font=("Century Gothic",16,"bold"),
     width=104,
-    height=2
+    height=3
 )
 header.place(x=0, y=0)
  
 # User Name
+user_icon = tk.PhotoImage(file="user.png")
+user_icon = user_icon.subsample(2,2)
+user = tk.Label(frame_form, image=user_icon, bg="#F3F5F7")
+user.place(x=270, y=160)
+
 label_user = tk.Label(
     frame_form,
     text="User Name:",
-    bg="white",
+    bg="#F3F5F7",
     font=("Century Gothic",14)
 )
 label_user.place(x=310, y=160)
@@ -78,41 +84,53 @@ user_name_input = tk.Entry(
     frame_form,
     width=40,
     font=("Century Gothic",11),
-    bg="#F5F5F5",
+    bg="#FCF9F9",
     fg="#333333",
-    relief="flat",
-    bd=4
+    relief="ridge",
+    bd=1
 )
+
 user_name_input.place(x=550, y=160)
 # Problem
+problem_icon = tk.PhotoImage(file="problem.png")
+problem_icon = problem_icon.subsample(2,2)
+problem = tk.Label(frame_form, image=problem_icon, bg="#F3F5F7")
+problem.place(x=270, y=220)
+
 label_problem = tk.Label(
     frame_form,
     text="Problem:",
-    bg="white",
+    bg="#F3F5F7",
     font=("Century Gothic",14)
 )
 label_problem.place(x=310, y=220)
 
 problem_input = tk.Text(
     frame_form,
-    width=40,
-    height=8,
+    width=60,
+    height=12,
     font=("Century Gothic",11),
-    bg="#F5F5F5",
+    bg="#FCF9F9",
     fg="#333333",
-    relief="flat",
-    bd=4,
-)
+    relief="ridge",
+    bd=1
+    )
 problem_input.place(x=550, y=220)
 
 # Prioridad
+priority_icon = tk.PhotoImage(file="priority.png")
+priority_icon = priority_icon.subsample(2,2)
+priority = tk.Label(frame_form, image=priority_icon, bg="#F3F5F7")
+priority.place(x=270, y=464)
+
 label_priority = tk.Label(
     frame_form,
     text="Priority:",
-    bg="white",
-    font=("Century Gothic",14)
-)
-label_priority.place(x=310, y=400)
+    bg="#F3F5F7",
+    font=("Century Gothic",14),
+   )
+
+label_priority.place(x=310, y=464)
 
 priority = tk.StringVar(value="Medium")
 priority_menu = tk.OptionMenu(
@@ -121,22 +139,21 @@ priority_menu = tk.OptionMenu(
     "Low",
     "Medium",
     "High",
-    "Critical"
-)
+    )
 
 def cambiar_color(*args):
     colores = {
         "Low": "#4CAF50",
         "Medium": "#FFC107",
         "High": "#FF9800",
-        "Critical": "#F44336"
+        
     }
 
     color = colores.get(priority.get(), "white")
 
     priority_menu.config(
         bg=color,
-        width=30,
+        width=40,
         font=("Century Gothic",10)
     )
 
@@ -145,7 +162,7 @@ priority.trace_add("write", cambiar_color)
 # Pintar el color inicial
 cambiar_color()
 
-priority_menu.place(x=550, y=400)
+priority_menu.place(x=550, y=464)
 
 #Creando una función para guardar los tickets
 def guardar_ticket():
@@ -174,16 +191,16 @@ def guardar_ticket():
     
 
 #Creando el botón para guardar 
-save_button = tk.Button(frame_form, text="GUARDAR", command=guardar_ticket, bg="#55638F", fg="white", font=("Century Gothic",11,"bold"), relief="flat", cursor="hand2", width=18, height=2)
-save_button.place(x=550, y=520)
+save_button = tk.Button(frame_form, text="GUARDAR", command=guardar_ticket, bg="#36405F", fg="white", font=("Century Gothic",11,"bold"), relief="flat", cursor="hand2", width=34, height=2)
+save_button.place(x=550, y=580)
 
 #creando boton para regresar a ventana principal
 def changescreen2():
     screen1.pack_forget()
     pantalla2.pack(fill="both", expand=True)
-    button_back = tk.Button(pantalla2, text="←\n", bg="#55638F", fg="White", command=lambda:changescreen1() )
-    button_back.place(x=4, y=8)
- 
+    button_back = tk.Button(pantalla2, text="←\n", bg="#55638F", height=4, fg="White", command=lambda:changescreen1() )
+    button_back.place(x=4, y=5)
+
 #PANTALLA 3
 pantalla3 = tk.Frame(root, bg="#d3d3d3")
  
