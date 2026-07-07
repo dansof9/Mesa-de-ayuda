@@ -1,9 +1,7 @@
-from login import *
-print("Backend cargado")
-print("Botón recibido:", btn_enviar_login)
 import json
 import os
-
+from tkinter import messagebox
+import tkinter as tk
 
 # BACKEND
 
@@ -29,10 +27,13 @@ def user_credenciales(user, password):
     return True
 
 
-def ejecutar_login():
-
+def ejecutar_login(root,
+                   txt_login_user,
+                   txt_login_pass):
+    
     user = txt_login_user.get().strip()
     password = txt_login_pass.get()
+
 
     if not user or not password:
         messagebox.showwarning("Atención", "Por favor llena todos los campos.")
@@ -58,11 +59,15 @@ def ejecutar_login():
         messagebox.showerror("Error", "Credenciales incorrectas.")
 
 
-def ejecutar_registro():
-
+def ejecutar_registro(root,
+                      txt_reg_user,
+                      txt_reg_pass,
+                      txt_reg_confirm):
     user = txt_reg_user.get().strip()
     password = txt_reg_pass.get()
     conf = txt_reg_confirm.get()
+
+
 
     if not user or not password or not conf:
         messagebox.showwarning("Atención", "Todos los campos son obligatorios.")
@@ -86,9 +91,6 @@ def ejecutar_registro():
     txt_reg_pass.delete(0, tk.END)
     txt_reg_confirm.delete(0, tk.END)
 
-
-btn_enviar_login.config(command=ejecutar_login)
-btn_enviar_registro.config(command=ejecutar_registro)
 
 
 

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+import backend_login
 
 
 # VENTANA PRINCIPAL DE BIENVENIDA (LAS 2 OPCIONES)
@@ -78,7 +79,21 @@ btn_enviar_registro.pack(fill="x", padx=40, pady=25, ipady=5)
 
 tk.Button(frame_registro, text="← Volver al inicio", font=("Arial", 9), bg="#ffffff", fg="gray", bd=0, command=regresar_al_menu).pack(pady=10)
 
-print("Botón login:", btn_enviar_login)
-print("Botón registro:", btn_enviar_registro)
+
 import backend_login
+btn_enviar_login.config(
+    command=lambda: backend_login.ejecutar_login(
+        root,
+        txt_login_user,
+        txt_login_pass
+    )
+)
+btn_enviar_registro.config(
+    command=lambda: backend_login.ejecutar_registro(
+        root,
+        txt_reg_user,
+        txt_reg_pass,
+        txt_reg_confirm
+    )
+)
 root.mainloop()
