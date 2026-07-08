@@ -606,29 +606,76 @@ entry_search.insert(0, "Insert your ticket ID...")
 entry_search.bind("<FocusIn>", remove_text)
 entry_search.bind("<FocusOut>", add_text)
 
-button_search = tk.Button(
-    screen1,
-    text="Search",
-    bg="#818EB9",
-    fg="Black",
-    borderwidth=1,
-    cursor="hand2",
-    height=1,
-    relief="raised"
-)
-button_search.place(x=1050, y=58)
- 
-def log_in(event):
-    button_search.config(bg="#818EB9")
-def go_out(event):
-    button_search.config(bg="White")
- 
-button_search.bind("<Enter>", log_in)
-button_search.bind("<Leave>", go_out)
+
+#PANTALLA 4 
+pantalla4 = tk.Frame(root, bg="#d3d3d3")
 
 
- 
+def changescreen6():
+   
+    pantalla4.pack_forget()
+    screen1.pack(fill="both", expand=True)
+
+def cambiar_pantalla(event):
+
+    #Eliminando la lista y buscando
+    id_buscado = entry_search.get().strip()
+    listbox.place_forget() 
+
+    if id_buscado == "" or id_buscado == "Insert your ticket ID...":
+        return
+
+    #limpiando para solo tener el numero
+    id_limpio = id_buscado.replace("#TI-", "").lstrip("0")
+    if id_limpio == "": 
+        id_limpio = "0"
+
+    #importando de backend
+    ticket_encontrado = backend1.buscar_ticket(id_limpio)
+
+    if ticket_encontrado:
+        
+        # Limpiar componentes previos que se hayan quedado en pantalla4
+        for componente in pantalla4.winfo_children():
+            componente.destroy()
+
+        #bton para regresar a la pantalla principal
+        button_back3 = tk.Button(pantalla4, text="←\n", bg="#d3d3d3", fg="black", font=("century gothic", 11, "bold"), command=changescreen6)
+        button_back3.place(x=20, y=50)
+
+        # DISEÑO
+        frame_resultado = tk.Frame(pantalla4, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove", width=1153, height=100)
+        frame_resultado.place(x=180, y=150)
+
+        lbl_id = tk.Label(frame_resultado, text=f"#TI-{ticket_encontrado['ID']:04d}", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 10, "bold"))
+        lbl_id.place(x=56, y=35)
+
+        lbl_issue = tk.Label(frame_resultado, text=ticket_encontrado['Issue'], bg="#DFD8D8", fg="#1F2937", font=("century gothic", 10, "bold"))
+        lbl_issue.place(x=254, y=35)
+
+        lbl_user = tk.Label(frame_resultado, text=ticket_encontrado['User'], bg="#DFD8D8", fg="#1F2937", font=("century gothic", 10, "bold"))
+        lbl_user.place(x=500, y=35)
+
+        lbl_priority = tk.Label(frame_resultado, text=ticket_encontrado['Priority'].upper(), bg="#00B40F", fg="black", width=12, font=("century gothic", 9, "bold"))
+        lbl_priority.place(x=844, y=35)
+
+        # Cambio entre pantallas
+        screen1.pack_forget()                      
+        pantalla4.pack(fill="both", expand=True)   
+
+        # Limpiando el buscador
+        entry_search.delete(0, tk.END)
+        entry_search.insert(0, "Insert your ticket ID...")
+        root.focus()
+    else:
+        messagebox.showerror("Not Found", f"No ticket found with ID: {id_buscado}")
+
+#Buscando por medio de la tecla "ENTER"
+entry_search.bind("<Return>", cambiar_pantalla)
+
  
 root.mainloop()
+
+
  
  

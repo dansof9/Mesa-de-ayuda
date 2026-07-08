@@ -54,3 +54,18 @@ def obtener_tickets():
             return json.load(f)
         except json.JSONDecodeError:
             return []
+        
+#FUNCION: sirve para buscar tickets mediante ID
+def buscar_ticket(id_buscado):
+    if not os.path.exists("tickets.json"):
+        return None
+    with open("tickets.json", "r", encoding="utf-8") as f:
+        try:
+            tickets = json.load(f)
+            for t in tickets:
+                # para evitar problmas con los tipos de datos
+                if str(t.get("ID")) == str(id_buscado):
+                    return t
+            return None
+        except json.JSONDecodeError:
+            return None
