@@ -144,8 +144,8 @@ priority_menu = tk.OptionMenu(
 def cambiar_color(*args):
     colores = {
         "Low": "#4CAF50",
-        "Medium": "#FFC107",
-        "High": "#FF9800",
+        "Medium": "#FF9800",
+        "High": "#FFC107",
         
     }
 
@@ -360,8 +360,17 @@ menu_opciones_status.add_command(label="Pending")
 menu_opciones_status.add_command(label="In progress")
 menu_opciones_status.add_command(label="Resolved")
 
-button_delete = tk.Button(frame_ticket1, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete = tk.Button(frame_ticket1, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket(button_delete))
 button_delete.place(x=1062, y=13)
+#Agregando funcionalidad
+def delete_ticket(button_delete):
+    # Preguntar al usuario antes de eliminar
+    confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
+    if confirmacion:
+        frame_ticket1= button_delete.master
+        frame_ticket1.destroy()
+    else:
+        print("Eliminación cancelada")
 
 #Ticket 2
 frame_ticket2= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
@@ -395,8 +404,18 @@ button_status2 = tk.Button(frame_ticket2, text="In progress", bg="#FF8E0D", fg="
 button_status2.place(x=950, y=13)
 button_status2.configure(command=lambda: mostrar_menu_status(button_status2))
 
-button_delete2 = tk.Button(frame_ticket2, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete2 = tk.Button(frame_ticket2, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket2(button_delete2))
 button_delete2.place(x=1062, y=13)
+#Agregando funcionalidad
+def delete_ticket2(button_delete2):
+    # Preguntar al usuario antes de eliminar
+    confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
+    if confirmacion:
+        frame_ticket2= button_delete2.master
+        frame_ticket2.destroy()
+    else:
+        print("Eliminación cancelada")
+
 
 #Ticket3
 frame_ticket3= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
@@ -430,8 +449,17 @@ button_status3 = tk.Button(frame_ticket3, text="Resolved", bg="#00B40F", fg="#00
 button_status3.place(x=950, y=13)
 button_status3.configure(command=lambda: mostrar_menu_status(button_status3))
 
-button_delete3 = tk.Button(frame_ticket3, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete3 = tk.Button(frame_ticket3, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket3(button_delete3))
 button_delete3.place(x=1062, y=13)
+#Agregando funcionalidad
+def delete_ticket3(button_delete3):
+    # Preguntar al usuario antes de eliminar
+    confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
+    if confirmacion:
+        frame_ticket3= button_delete3.master
+        frame_ticket3.destroy()
+    else:
+        print("Eliminación cancelada")
 
 #Ticket4
 frame_ticket4= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
@@ -466,9 +494,17 @@ button_status4 = tk.Button(frame_ticket4, text="Resolved", bg="#00B40F", fg="#00
 button_status4.place(x=950, y=13)
 button_status4.configure(command=lambda: mostrar_menu_status(button_status4))
 
-button_delete4 = tk.Button(frame_ticket4, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+button_delete4 = tk.Button(frame_ticket4, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket4(button_delete4))
 button_delete4.place(x=1062, y=13)
-                 
+def delete_ticket4(button_delete4):
+    # Preguntar al usuario antes de eliminar
+    confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
+    if confirmacion:
+        frame_ticket4= button_delete4.master
+        frame_ticket4.destroy()
+    else:
+        print("Eliminación cancelada")                
+
 #Añadiendo un título para la pantalla
 label_title = tk.Label(screen1,
     text="HELPDESK: INCIDENT MANAGEMENT",
