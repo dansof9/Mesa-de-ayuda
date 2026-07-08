@@ -173,11 +173,6 @@ def guardar_ticket():
 
     if almacenar_en_json(usuario, problema, prioridad):
 
-        messagebox.showinfo(
-            "Éxito",
-            "Ticket guardado correctamente"
-        )
-
         user_name_input.delete(0, tk.END)
         problem_input.delete("1.0", tk.END)
 
@@ -237,7 +232,7 @@ def mostrar_tickets():
 
     # labels para los tickets
     for datos in tickets:
-        texto = f"User: {datos['User']}   |   ISSUE: {datos['Issue']}, Priority: {datos['Priority']}"
+        texto = f"ID: {datos['ID']:03d}   |User: {datos['User']}   |   ISSUE: {datos['Issue']} | Priority: {datos['Priority']}"
         
         my_tickets = tk.Label(
             pantalla3, 

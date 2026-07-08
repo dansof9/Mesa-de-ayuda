@@ -1,27 +1,3 @@
 [
-    {
-        "User": "josue",
-        "Issue": "i cant acces",
-        "Priority": "Medium"
-    },
-    {
-        "User": "Osmin",
-        "Issue": "I forgot my password",
-        "Priority": "High"
-    },
-    {
-        "User": "ghftufurit7y989yih",
-        "Issue": "iyuigutfryrdtfgbhvujhn",
-        "Priority": "Critical"
-    },
-    {
-        "User": "Josue_amaya",
-        "Issue": "Desde ayer perdi mu cntraseña",
-        "Priority": "Critical"
-    },
-    {
-        "User": "jos",
-        "Issue": "i dont know",
-        "Priority": "High"
-    }
+    
 ]
