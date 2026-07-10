@@ -197,9 +197,11 @@ def changescreen2():
     button_back.place(x=4, y=5)
 
 #PANTALLA 3
+
+# PANTALLA 3 (
 pantalla3 = tk.Frame(root, bg="#d3d3d3")
  
-#Creando un botón para que el usuario vea sus tickets
+# Creando un botón para que el usuario vea sus tickets
 def changescreen4():
     pantalla3.pack_forget()
     screen1.pack(fill="both", expand=True)
@@ -213,49 +215,116 @@ def go_out(event):
  
 button_my_tickets.bind("<Enter>", log_in)
 button_my_tickets.bind("<Leave>", go_out)
-
-# Lugar donde se almacenan y muestran los tickets creados en pantalla
+ 
 def mostrar_tickets():
-    # Funcion para limpiar mis tickets (eliminando)
+ 
     for componente in pantalla3.winfo_children():
-        #evitar que desaparezca el boton para regresar
-        if isinstance(componente, tk.Label):
-            componente.destroy()
-
-    # Colocando los tickets 
-    tickets = backend1.obtener_tickets()
-
-    if not tickets:
-        lbl_vacio = tk.Label(pantalla3, text="No hay tickets registrados.", bg="#d3d3d3", font=("century gothic", 10))
-        lbl_vacio.pack(pady=20)
+        if isinstance(componente, tk.Button) and "←" in componente.cget("text"):
+            continue
+        componente.destroy()
+ 
+    try:
+        with open("tickets.json", "r", encoding="utf-8") as archivo:
+            tickets_cargados = json.load(archivo)
+    except FileNotFoundError:
+        tickets_cargados = []
+ 
+    if not tickets_cargados:
+        lbl_vacio = tk.Label(pantalla3, text="No hay tickets registrados.", bg="#d3d3d3", font=("century gothic", 12, "bold"))
+        lbl_vacio.pack(pady=50)
         return
-
-    # labels para los tickets
-    for datos in tickets:
-        texto = f"ID: {datos['ID']:03d}   |User: {datos['User']}   |   ISSUE: {datos['Issue']} | Priority: {datos['Priority']}"
+ 
+    colores = {
+        "Low": "#2ECC71",
+        "Medium": "#F1C40F",
+        "High": "#E67E22",
+        "Critical": "#E74C3C"
+    }
+ 
+    # Generar de forma ordenada las tarjetas dentro de pantalla3
+    for ticket in tickets_cargados:
+        prioridad = ticket.get("Priority", "Medium")
+        color_barra = colores.get(prioridad, "#F1C40F")
         
-        my_tickets = tk.Label(
-            pantalla3, 
-            text=texto, 
-            font=("century gothic", 10), 
-            bg="white", 
-            fg="black", 
-            bd=1, 
-            relief="solid", 
-            padx=15, 
-            pady=8,
-            anchor="w"
+        tarjeta = tk.Frame(pantalla3, bg="white", bd=1, relief="solid")
+        tarjeta.pack(padx=40, pady=10, fill="x")
+ 
+        barra_prioridad = tk.Label(
+            tarjeta,
+            text=prioridad.upper(),
+            bg=color_barra,
+            fg="white",
+            font=("century gothic", 9, "bold")
         )
-        my_tickets.pack(fill="x", padx=40, pady=5)
-
-#creando boton para regresar a ventana principal
+        barra_prioridad.pack(fill="x")
+ 
+        lbl_issue = tk.Label(
+            tarjeta,
+            text=ticket["Issue"],
+            font=("century gothic", 11, "bold"),
+            bg="white",
+            anchor="w",
+            padx=10,
+            pady=5
+        )
+        lbl_issue.pack(anchor="w", fill="x")
+ 
+        lbl_user = tk.Label(
+            tarjeta,
+            text=f"Responsable: {ticket['User']}",
+            font=("century gothic", 9),
+            bg="white",
+            fg="#555555",
+            anchor="w",
+            padx=10,
+            pady=2
+        )
+        lbl_user.pack(anchor="w", fill="x")
+ 
+# creando boton para regresar a ventana principal
 def changescreen5():
     screen1.pack_forget()
     pantalla3.pack(fill="both", expand=True)
-    button_back2 = tk.Button(pantalla3, text="←\n", bg="#d3d3d3", fg="black", command=lambda:changescreen4() )
-    button_back2.place(x=20, y=50)
+    button_back2 = tk.Button(pantalla3, text="←", bg="#d3d3d3", fg="black", width=1, height=1, command=lambda:changescreen4() )
+    button_back2.place(x=1, y=50)
+ 
 
-    mostrar_tickets()
+
+# === BOTÓN CERRAR SESIÓN === #
+
+# Función para salir de la aplicación 
+def cerrar_sesion():
+    confirmacion = messagebox.askyesno("LOG OUT", "¿Está seguro de que desea salir del sistema?")
+    if confirmacion:
+        os.system("python login.py")
+        root.destroy() 
+
+# Creando el botón
+button_logout = tk.Button(
+    frame_menu, 
+    text="LOG OUT", 
+    height=1, 
+    width=17, 
+    bg="#A70000",      
+    fg="White", 
+    font=("century gothic", 11, "bold"), 
+    borderwidth=1, 
+    relief="solid", 
+    cursor="hand2", 
+    anchor="center", 
+    command=cerrar_sesion
+)
+button_logout.place(x=0, y=650) 
+
+def log_in_logout(event):
+    button_logout.config(bg="#7A0000") 
+def go_out_logout(event):
+    button_logout.config(bg="#A70000") 
+
+button_logout.bind("<Enter>", log_in_logout)
+button_logout.bind("<Leave>", go_out_logout)
+
+mostrar_tickets()
  
  
 #Creando una pestaña para que el usuario pueda ver sus tickets
@@ -362,12 +431,18 @@ menu_opciones_status.add_command(label="Resolved")
 
 button_delete = tk.Button(frame_ticket1, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket(button_delete))
 button_delete.place(x=1062, y=13)
-#Agregando funcionalidad
+
+#ELMINANDO TICKET DE LA PARTE VISUAL Y DE JSON
 def delete_ticket(button_delete):
-    # Preguntar al usuario antes de eliminar
     confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
     if confirmacion:
-        frame_ticket1= button_delete.master
+        id_limpio = "1" 
+        
+        # Eliminamos del archivo JSON
+        backend1.eliminar_ticket_json(id_limpio)
+        
+        # Eliminamos la interfaz visual
+        frame_ticket1 = button_delete.master
         frame_ticket1.destroy()
     else:
         print("Eliminación cancelada")
@@ -406,12 +481,14 @@ button_status2.configure(command=lambda: mostrar_menu_status(button_status2))
 
 button_delete2 = tk.Button(frame_ticket2, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket2(button_delete2))
 button_delete2.place(x=1062, y=13)
-#Agregando funcionalidad
+
 def delete_ticket2(button_delete2):
-    # Preguntar al usuario antes de eliminar
     confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
     if confirmacion:
-        frame_ticket2= button_delete2.master
+        id_limpio = "2"
+        backend1.eliminar_ticket_json(id_limpio)
+        
+        frame_ticket2 = button_delete2.master
         frame_ticket2.destroy()
     else:
         print("Eliminación cancelada")
@@ -606,76 +683,151 @@ entry_search.insert(0, "Insert your ticket ID...")
 entry_search.bind("<FocusIn>", remove_text)
 entry_search.bind("<FocusOut>", add_text)
 
+# === PANTALLA 4 ===  #
 
-#PANTALLA 4 
 pantalla4 = tk.Frame(root, bg="#d3d3d3")
 
-
 def changescreen6():
-   
     pantalla4.pack_forget()
     screen1.pack(fill="both", expand=True)
 
 def cambiar_pantalla(event):
-
-    #Eliminando la lista y buscando
     id_buscado = entry_search.get().strip()
     listbox.place_forget() 
 
     if id_buscado == "" or id_buscado == "Insert your ticket ID...":
         return
 
-    #limpiando para solo tener el numero
-    id_limpio = id_buscado.replace("#TI-", "").lstrip("0")
-    if id_limpio == "": 
+    try:
+        id_limpio = str(int(id_buscado.replace("#TI-", "")))
+    except ValueError:
         id_limpio = "0"
 
-    #importando de backend
     ticket_encontrado = backend1.buscar_ticket(id_limpio)
 
     if ticket_encontrado:
         
-        # Limpiar componentes previos que se hayan quedado en pantalla4
+        # Limpiando pantalla4 
         for componente in pantalla4.winfo_children():
             componente.destroy()
 
-        #bton para regresar a la pantalla principal
+        # Botón para regresar a la pantalla principal
         button_back3 = tk.Button(pantalla4, text="←\n", bg="#d3d3d3", fg="black", font=("century gothic", 11, "bold"), command=changescreen6)
         button_back3.place(x=20, y=50)
 
-        # DISEÑO
-        frame_resultado = tk.Frame(pantalla4, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove", width=1153, height=100)
-        frame_resultado.place(x=180, y=150)
+      # DESING #
+        
 
-        lbl_id = tk.Label(frame_resultado, text=f"#TI-{ticket_encontrado['ID']:04d}", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 10, "bold"))
-        lbl_id.place(x=56, y=35)
+        frame_resultado = tk.Frame(pantalla4, bg="#55638F", bd=0, highlightthickness=1, highlightbackground="#434F74", relief="flat", width=450, height=430)
+        frame_resultado.place(x=450, y=120)
 
-        lbl_issue = tk.Label(frame_resultado, text=ticket_encontrado['Issue'], bg="#DFD8D8", fg="#1F2937", font=("century gothic", 10, "bold"))
-        lbl_issue.place(x=254, y=35)
+        # 1.ID 
+        lbl_id = tk.Label(frame_resultado, text=f"#TI\n{ticket_encontrado['ID']:03d}", bg="#5B132B", fg="White", font=("Segoe UI", 12, "bold"), width=6, height=3, bd=0, justify="center")
+        lbl_id.place(x=30, y=25)
 
-        lbl_user = tk.Label(frame_resultado, text=ticket_encontrado['User'], bg="#DFD8D8", fg="#1F2937", font=("century gothic", 10, "bold"))
-        lbl_user.place(x=500, y=35)
+        # Fecha alineada en la esquina superior derecha
+        lbl_fecha = tk.Label(frame_resultado, text="09 de julio 2026", bg="#55638F", fg="#000000", font=("century gothic", 12, "bold"))
+        lbl_fecha.place(x=300, y=35)
 
-        lbl_priority = tk.Label(frame_resultado, text=ticket_encontrado['Priority'].upper(), bg="#00B40F", fg="black", width=12, font=("century gothic", 9, "bold"))
-        lbl_priority.place(x=844, y=35)
+        # 2.ISSUE 
+        lbl_issue_title = tk.Label(frame_resultado, text="ISSUE:", bg="#55638F", fg="#000000", font=("century gothic", 12, "bold"))
+        lbl_issue_title.place(x=30, y=110)
 
-        # Cambio entre pantallas
+        lbl_issue = tk.Label(frame_resultado, text=ticket_encontrado['Issue'], bg="#55638F", fg="Black", font=("Segoe UI", 11), justify="left", anchor="nw", wraplength=390)
+        lbl_issue.place(x=30, y=135, width=390, height=110)
+
+        # 3.USER
+
+        lbl_user_title = tk.Label(frame_resultado, text="USER:", bg="#55638F", fg="#000000", font=("century gothic", 12, "bold"))
+        lbl_user_title.place(x=30, y=260)
+
+        lbl_user = tk.Label(frame_resultado, text=ticket_encontrado['User'].upper(), bg="#55638F", fg="#B4ADAD", font=("century gothic", 12, "bold"))
+        lbl_user.place(x=90, y=260)
+
+        # 4.LÍNEA DIVISORIA
+        line = tk.Frame(frame_resultado, bg="#BDBDBD", width=300, height=2)
+        line.place(x=70, y=300)
+
+        # 5.BOTONES
+
+        #priority
+        def selecionar_opcion2(boton_selecionado2, texto_selecionado2, color_selecionado2):
+            boton_selecionado2.configure(text=f"{texto_selecionado2}", bg=color_selecionado2, activebackground=color_selecionado2)
+
+        def mostrar_menu_priority_p4(boton_actual):
+            x = boton_actual.winfo_rootx()
+            y = boton_actual.winfo_rooty() + button_priority.winfo_height()
+            menu_opciones_priority.post(x, y)
+
+        prio_txt = ticket_encontrado['Priority'].capitalize()
+        prio_color = "#00B40F" if prio_txt == "Low" else ("#FF8E0D" if prio_txt == "Medium" else "#FFD104")
+
+        lbl_txt_prio = tk.Label(frame_resultado, text="Priority:", bg="#55638F", fg="White", font=("century gothic", 9, "bold"))
+        lbl_txt_prio.place(x=30, y=320)
+
+        button_priority = tk.Button(frame_resultado, text=prio_txt, bg=prio_color, fg="#000000", width=10, bd=0, font=("century gothic", 8, "bold"))
+        button_priority.place(x=30, y=345)
+        button_priority.configure(command=lambda: mostrar_menu_priority_p4(button_priority))
+
+        menu_opciones_priority = tk.Menu(frame_resultado, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+        menu_opciones_priority.add_command(label="High", command=lambda: selecionar_opcion2(button_priority, "High", "#FFD104"))
+        menu_opciones_priority.add_command(label="Medium", command=lambda: selecionar_opcion2(button_priority, "Medium", "#FF8E0D"))
+        menu_opciones_priority.add_command(label="Low", command=lambda: selecionar_opcion2(button_priority, "Low", "#00B40F"))
+
+
+      #status
+        def selecionar_opcion(boton_selecionado, texto_selecionado, color_selecionado):
+            boton_selecionado.configure(text=f"{texto_selecionado}", bg=color_selecionado, activebackground=color_selecionado)
+
+        def mostrar_menu_status_p4(boton_actual2):
+            x = boton_actual2.winfo_rootx()
+            y = boton_actual2.winfo_rooty() + button_status.winfo_height()
+            menu_opciones_status.post(x, y)
+
+        lbl_txt_status = tk.Label(frame_resultado, text="Status:", bg="#55638F", fg="White", font=("century gothic", 9, "bold"))
+        lbl_txt_status.place(x=175, y=320)
+
+        button_status = tk.Button(frame_resultado, text="Resolved", bg="#00B40F", fg="Black", width=10, bd=0, font=("century gothic", 8, "bold"))
+        button_status.place(x=175, y=345)
+        button_status.configure(command=lambda: mostrar_menu_status_p4(button_status))
+
+        menu_opciones_status = tk.Menu(frame_resultado, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+        menu_opciones_status.add_command(label="Pending", command=lambda: selecionar_opcion(button_status, "Pending", "#FFD104"))
+        menu_opciones_status.add_command(label="In progress", command=lambda: selecionar_opcion(button_status, "In progress", "#FF8E0D"))
+        menu_opciones_status.add_command(label="Resolved", command=lambda: selecionar_opcion(button_status, "Resolved", "#00B40F"))
+
+
+        #DELETE
+
+        def delete_ticket_p4(button_del):
+            confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
+            if confirmacion:
+                id_a_borrar = ticket_encontrado['ID']
+                
+                backend1.eliminar_ticket_json(id_a_borrar)
+                button_del.master.destroy()
+                changescreen6()
+            else:
+                print("Eliminación cancelada")
+
+        button_delete = tk.Button(frame_resultado, text="Delete", bg="#A70000", fg="#DFD8D8", width=10, bd=0, font=("century gothic", 8, "bold"), command=lambda: delete_ticket_p4(button_delete))
+        button_delete.place(x=320, y=345)
+
+
+        # Cambio de pantallas
         screen1.pack_forget()                      
         pantalla4.pack(fill="both", expand=True)   
 
-        # Limpiando el buscador
+        # Limpieza de buscador
         entry_search.delete(0, tk.END)
         entry_search.insert(0, "Insert your ticket ID...")
         root.focus()
     else:
         messagebox.showerror("Not Found", f"No ticket found with ID: {id_buscado}")
 
-#Buscando por medio de la tecla "ENTER"
+# Buscar mediante tecla "ENTER"
 entry_search.bind("<Return>", cambiar_pantalla)
 
- 
+
+
 root.mainloop()
-
-
- 
- 

@@ -69,3 +69,22 @@ def buscar_ticket(id_buscado):
             return None
         except json.JSONDecodeError:
             return None
+
+#Creando funcion para elminar los tikets almacenados en json
+# NUEVA FUNCIÓN: Sirve para eliminar un ticket del archivo JSON por su ID
+def eliminar_ticket_json(id_eliminar):
+    if not os.path.exists("tickets.json"):
+        return False
+        
+    with open("tickets.json", "r", encoding="utf-8") as f:
+        try:
+            tickets = json.load(f)
+        except json.JSONDecodeError:
+            return False
+    tickets_actualizados = [t for t in tickets if str(t.get("ID")) != str(id_eliminar)]
+
+    #Se actualiza el archivo JSON
+    with open("tickets.json", "w", encoding="utf-8") as f:
+        json.dump(tickets_actualizados, f, indent=4, ensure_ascii=False)
+        
+    return True

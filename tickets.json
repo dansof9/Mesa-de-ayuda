@@ -1,11 +1,5 @@
 [
     {
-        "ID": 1,
-        "User": "jos_1030_ue",
-        "Issue": "Olvide mi contraseña principal, la necesito para trabajar.",
-        "Priority": "High"
-    },
-    {
         "ID": 2,
         "User": "jos_1030_ue",
         "Issue": "El internet se caea cada hora.",
