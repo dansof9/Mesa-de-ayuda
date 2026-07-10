@@ -498,29 +498,14 @@ def delete_ticket4(button_delete4):
         print("Eliminación cancelada")                
 
 #Añadiendo un título para la pantalla
-label_title = tk.Label(screen1,
-    text="HELPDESK: INCIDENT MANAGEMENT",
-    bg="#D3D3D3",
-    fg="black",
-    font=("Century Gothic", 25, "bold")
-)
+label_title = tk.Label(screen1, text="HELPDESK: INCIDENT MANAGEMENT", bg="#D3D3D3", fg="black", font=("Century Gothic", 25, "bold"))
 label_title.place(x=180, y=8)
  
 #Creando un buscador
-label_search = tk.Label(
-    screen1,
-    bg="#D3D3D3",
-    fg="black",
-    font=("Century Gothic", 14, "bold")
-)
+label_search = tk.Label(screen1, bg="#D3D3D3", fg="black", font=("Century Gothic", 14, "bold"))
 label_search.place(x=180, y=25)
- 
 
-entry_search = tk.Entry(
-    screen1,
-    width=110,
-    font=("Century Gothic", 11)
-)
+entry_search = tk.Entry(screen1, width=110, font=("Century Gothic", 11))
 entry_search.place(x=180, y=60)
 
 # Creando una lista de tickets
@@ -539,7 +524,6 @@ listbox = tk.Listbox(
 
 listbox.place_forget()
 
- 
 #Creando una función para buscar tickets
 def buscar(event):
 
