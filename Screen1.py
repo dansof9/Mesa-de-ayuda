@@ -226,7 +226,7 @@ button_logout = tk.Button(
     anchor="center", 
     command=cerrar_sesion
 )
-button_logout.place(x=0, y=650) 
+button_logout.place(x=0, y=666) 
 
 def log_in_logout(event):
     button_logout.config(bg="#02021A") 
