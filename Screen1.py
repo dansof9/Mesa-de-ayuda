@@ -585,7 +585,7 @@ def cambiar_pantalla(event):
 
     if ticket_encontrado:
         
-        # Limpiando pantalla4 
+        # Limpiando pantalla 4
         for componente in pantalla4.winfo_children():
             componente.destroy()
 
