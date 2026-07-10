@@ -402,7 +402,7 @@ menu_opciones_priority.add_command(label="High")
 menu_opciones_priority.add_command(label="Medium")
 menu_opciones_priority.add_command(label="Low")
 
-#BOTON DE STATUS---
+#BOTON DE STATUS
 
 #Creando el boton para abrir el menu en cascada de status
 def selecionar_opcion(boton_selecionado, texto_selecionado, color_selecionado):
@@ -423,7 +423,7 @@ button_status = tk.Button(frame_ticket1, text="Resolved", command=mostrar_menu_s
 button_status.place(x=953, y=13)
 button_status.configure(command=lambda: mostrar_menu_status(button_status))
 
-#Creando menu cascada
+#Creando menu cascad
 menu_opciones_status = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
 menu_opciones_status.add_command(label="Pending")
 menu_opciones_status.add_command(label="In progress")
