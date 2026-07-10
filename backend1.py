@@ -1,6 +1,7 @@
 import os
 import json
 from tkinter import messagebox
+from datetime import datetime
 
 #Almacenado los tickets en un archivo JSON
 def almacenar_en_json(user, issue, priority):
@@ -26,12 +27,15 @@ def almacenar_en_json(user, issue, priority):
     else:
         nuevo_id = 1
 
+    fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
+
     #Datos que se almacenan
     datos = {
         "ID": nuevo_id,
         "User" : user,
         "Issue": issue,
-        "Priority": priority
+        "Priority": priority,
+        "Date": fecha
     }
 
     #ACTUALIZAR

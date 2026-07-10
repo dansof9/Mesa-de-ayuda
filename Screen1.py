@@ -351,31 +351,81 @@ label_text5.place(x=949, y=0)
 
 
  
+#Pantalla de tickets recientes
+def act_tickets_recientes():
+    for componente in frame_user_tickets.winfo_children():
+        if isinstance(componente, tk.Label) and componente.winfo_y() > 0:
+            componente.destroy()
+        elif isinstance(componente, tk.Frame) and componente.winfo_y() > 0:
+            componente.destroy()
  
-#Creando tickets de ejemplo
-frame_ticket1 = tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
-frame_ticket1.place(x=0, y=30)
+#bteniendo los datos reales desde el backend
+lista_tickets = backend1.obtener_tickets()
+tickets_recientes = list(reversed(lista_tickets))[:4]
+posicion_y = 30
  
-
-label_document = tk.Label(frame_ticket1,  bg="#DFD8D8")
-label_document.place(x=16, y=8)
+#Creando vizualizacion de ticket
+for datos in tickets_recientes:
+        #Contenedor del ticket individual
+        ticket_view = tk.Frame(frame_user_tickets, height=45, width=1153, bg="#DFD8D8", bd=1, relief="groove")
+        ticket_view.place(x=0, y=posicion_y)
+        ticket_view.pack_propagate(False)
+       
+        #ID del Ticket
+        lbl_id = tk.Label(ticket_view, text=f"#TI-{datos['ID']:04d}", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+        lbl_id.place(x=56, y=13)
+       
+        #issue
+        lbl_prob = tk.Label(ticket_view, text=datos['Issue'], bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+        lbl_prob.place(x=175, y=13)
+       
+        #Icono de usuario y Nombre
+        lbl_user_img = tk.Label(ticket_view, bg="#DFD8D8")
+        lbl_user_img.place(x=464, y=8)
+       
+        lbl_user_name = tk.Label(ticket_view, text=datos['User'], bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+        lbl_user_name.place(x=500, y=13)
+       
+        #Fecha de creación
+        lbl_date = tk.Label(ticket_view, text=datos.get('Date'), bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
+        lbl_date.place(x=666, y=13)
  
-label_icon_id = tk.Label(frame_ticket1, text="#TI-0001", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_id.place(x=56, y=13)
-
-label_icon_problem = tk.Label(frame_ticket1, text="I can´t access my account", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_problem.place(x=254, y=13)
-
-label_icon_user = tk.PhotoImage(file="user.png")
-label_icon_user = label_icon_user.subsample(2,2)
-label_user = tk.Label(frame_ticket1, image=label_icon_user, bg="#DFD8D8")
-label_user.place(x=464, y=8)
-
-label_user = tk.Label(frame_ticket1, text="dansof9", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_user.place(x=500, y=13)
  
-label_icon_date = tk.Label(frame_ticket1, text="25/06/2026 9:14", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_date.place(x=666, y=13)
+        #Botón Prioridad
+        color_p = {"Low": "#00B40F", "Medium": "#FF8E0D", "High": "#FFD104"}.get(datos['Priority'], "#00B40F")
+        btn_p = tk.Button(ticket_view, text=datos['Priority'].lower(), bg=color_p, fg="#000000", width=9, font=("century gothic", 8, "bold"))
+        btn_p.place(x=844, y=13)
+        btn_p.configure(command=lambda b=btn_p: mostrar_menu_priority(b))
+       
+        #Botón Estatus
+        estado_actual = datos.get('Status', "Pending")
+        color_s = {"Pending": "#FFD104", "In progress": "#FF8E0D", "Resolved": "#00B40F"}.get(estado_actual, "#FFD104")
+        btn_s = tk.Button(ticket_view, text=estado_actual, bg=color_s, fg="Black", width=9, font=("century gothic", 8, "bold"))
+        btn_s.place(x=953, y=13)
+        btn_s.configure(command=lambda b=btn_s: mostrar_menu_status(b))
+       
+        #Botón Eliminar
+        btn_d = tk.Button(ticket_view, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"))
+        btn_d.place(x=1062, y=13)
+        btn_d.configure(command=lambda r=ticket_view: ejecutar_eliminacion_logica(r))
+       
+        posicion_y += 49
+ 
+def ejecutar_eliminacion_logica(fila_widget):
+    confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
+    if confirmacion:
+        id_limpio = "1" 
+        
+        # Eliminamos del archivo JSON
+        backend1.eliminar_ticket_json(id_limpio)
+        
+        # Eliminamos la interfaz visual
+        fila_widget.destroy()
+    else:
+        print("Eliminación cancelada")
+
+
+
 
 #Creando el boton para abrir el menu en cascada de priority
 def selecionar_opcion2(boton_selecionado2, texto_selecionado2, color_selecionado2):
@@ -383,7 +433,7 @@ def selecionar_opcion2(boton_selecionado2, texto_selecionado2, color_selecionado
 
 def mostrar_menu_priority(boton_actual):
  x = boton_actual.winfo_rootx()
- y = boton_actual.winfo_rooty() + button_priority.winfo_height()
+ y = boton_actual.winfo_rooty() + btn_p.winfo_height()
  menu_opciones_priority.post(x, y)
 
 #creando menu cascada para todos los botones
@@ -391,13 +441,8 @@ def mostrar_menu_priority(boton_actual):
  menu_opciones_priority.entryconfigure(1, command=lambda: selecionar_opcion2(boton_actual, "Medium","#FF8E0D" ))
  menu_opciones_priority.entryconfigure(2, command=lambda: selecionar_opcion2(boton_actual, "Low","#00B40F"))
 
-#Creando el boton priority
-button_priority = tk.Button(frame_ticket1, text="low", bg="#00B40F", fg="#000000", width=9, font=("century gothic", 8, "bold"))
-button_priority.place(x=844, y=13)
-button_priority.configure(command=lambda: mostrar_menu_priority(button_priority))
-
 #Creando menu cascada
-menu_opciones_priority = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+menu_opciones_priority = tk.Menu(frame_user_tickets, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
 menu_opciones_priority.add_command(label="High")
 menu_opciones_priority.add_command(label="Medium")
 menu_opciones_priority.add_command(label="Low")
@@ -410,7 +455,7 @@ def selecionar_opcion(boton_selecionado, texto_selecionado, color_selecionado):
 
 def mostrar_menu_status(boton_actual2):
  x = boton_actual2.winfo_rootx()
- y = boton_actual2.winfo_rooty() + button_status.winfo_height()
+ y = boton_actual2.winfo_rooty() + btn_s.winfo_height()
  menu_opciones_status.post(x, y)
 
 #creando menu cascada para todos los botones
@@ -418,25 +463,19 @@ def mostrar_menu_status(boton_actual2):
  menu_opciones_status.entryconfigure(1, command=lambda: selecionar_opcion(boton_actual2, "In progress","#FF8E0D" ))
  menu_opciones_status.entryconfigure(2, command=lambda: selecionar_opcion(boton_actual2, "Resolved","#00B40F"))
 
-#Creando boton status
-button_status = tk.Button(frame_ticket1, text="Resolved", command=mostrar_menu_status, bg="#00B40F", fg="Black", width=9, font=("century gothic", 8, "bold"))
-button_status.place(x=953, y=13)
-button_status.configure(command=lambda: mostrar_menu_status(button_status))
 
-#Creando menu cascad
-menu_opciones_status = tk.Menu(frame_ticket1, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
+#Creando menu cascada
+menu_opciones_status = tk.Menu(frame_user_tickets, tearoff=0, bg="white", fg="black", font=("century gothic", 8, "bold"))
 menu_opciones_status.add_command(label="Pending")
 menu_opciones_status.add_command(label="In progress")
 menu_opciones_status.add_command(label="Resolved")
 
-button_delete = tk.Button(frame_ticket1, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket(button_delete))
-button_delete.place(x=1062, y=13)
 
 #ELMINANDO TICKET DE LA PARTE VISUAL Y DE JSON
 def delete_ticket(button_delete):
     confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
     if confirmacion:
-        id_limpio = "1" 
+        id_limpio = "2" 
         
         # Eliminamos del archivo JSON
         backend1.eliminar_ticket_json(id_limpio)
@@ -447,45 +486,10 @@ def delete_ticket(button_delete):
     else:
         print("Eliminación cancelada")
 
-#Ticket 2
-frame_ticket2= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
-frame_ticket2.place(x=0, y=79)
-
-label_wifi = tk.Label(frame_ticket2,bg="#DFD8D8")
-label_wifi.place(x=16, y=8)
-
-label_id2 = tk.Label(frame_ticket2, text="#TI-0002", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_id2.place(x=56, y=13)
-
-label_icon_problem2 = tk.Label(frame_ticket2, text="Connection problems", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_problem2.place(x=276, y=13)
-
-label_icon_user2 = tk.PhotoImage(file="user.png")
-label_icon_user2 = label_icon_user2.subsample(2,2)
-label_user2 = tk.Label(frame_ticket2, image=label_icon_user2, bg="#DFD8D8")
-label_user2.place(x=464, y=8)
-
-label_user2 = tk.Label(frame_ticket2, text="Jos10-30ue", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_user2.place(x=500, y=13)
-
-label_icon_date2 = tk.Label(frame_ticket2, text="29/05/2026 11:14", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_date2.place(x=665, y=13)
-
-button_priority2 = tk.Button(frame_ticket2, text="High", bg="#FFD104", fg="#000000", width=9, font=("century gothic", 8, "bold"))
-button_priority2.place(x=844, y=13)
-button_priority2.configure(command=lambda: mostrar_menu_priority(button_priority2))
-
-button_status2 = tk.Button(frame_ticket2, text="In progress", bg="#FF8E0D", fg="#000000", width=9, font=("century gothic", 8, "bold"))
-button_status2.place(x=950, y=13)
-button_status2.configure(command=lambda: mostrar_menu_status(button_status2))
-
-button_delete2 = tk.Button(frame_ticket2, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket2(button_delete2))
-button_delete2.place(x=1062, y=13)
-
 def delete_ticket2(button_delete2):
     confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
     if confirmacion:
-        id_limpio = "2"
+        id_limpio = "3"
         backend1.eliminar_ticket_json(id_limpio)
         
         frame_ticket2 = button_delete2.master
@@ -493,94 +497,6 @@ def delete_ticket2(button_delete2):
     else:
         print("Eliminación cancelada")
 
-
-#Ticket3
-frame_ticket3= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
-frame_ticket3.place(x=0, y=128)
-
-label_wifi2 = tk.Label(frame_ticket3, bg="#DFD8D8")
-label_wifi2.place(x=16, y=8)
-
-label_id3 = tk.Label(frame_ticket3, text="#TI-0003", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_id3.place(x=56, y=13)
-
-label_icon_problem3 = tk.Label(frame_ticket3, text="Connection problems", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_problem3.place(x=276, y=13)
-
-label_icon_user3 = tk.PhotoImage(file="user.png")
-label_icon_user3 = label_icon_user2.subsample(2,2)
-label_user3 = tk.Label(frame_ticket3, image=label_icon_user2, bg="#DFD8D8")
-label_user3.place(x=464, y=8)
-
-label_user3 = tk.Label(frame_ticket3, text="Javersols8", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_user3.place(x=500, y=13)
-
-label_icon_date3 = tk.Label(frame_ticket3, text="18/10/2026 11:18", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_date3.place(x=665, y=13)
-
-button_priority3 = tk.Button(frame_ticket3, text="Medium", bg="#FF8E0D", fg="#000000", width=9, font=("century gothic", 8, "bold"))
-button_priority3.place(x=844, y=13)
-button_priority3.configure(command=lambda: mostrar_menu_priority(button_priority3))
-
-button_status3 = tk.Button(frame_ticket3, text="Resolved", bg="#00B40F", fg="#000000", width=9, font=("century gothic", 8, "bold"))
-button_status3.place(x=950, y=13)
-button_status3.configure(command=lambda: mostrar_menu_status(button_status3))
-
-button_delete3 = tk.Button(frame_ticket3, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket3(button_delete3))
-button_delete3.place(x=1062, y=13)
-#Agregando funcionalidad
-def delete_ticket3(button_delete3):
-    # Preguntar al usuario antes de eliminar
-    confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
-    if confirmacion:
-        frame_ticket3= button_delete3.master
-        frame_ticket3.destroy()
-    else:
-        print("Eliminación cancelada")
-
-#Ticket4
-frame_ticket4= tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
-frame_ticket4.place(x=0, y=177)
-
-
-label_padlock2 = tk.Label(frame_ticket4, bg="#DFD8D8")
-label_padlock2.place(x=16, y=8)
-
-label_id4 = tk.Label(frame_ticket4, text="#TI-0004", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_id4.place(x=56, y=13)
-
-label_icon_problem4 = tk.Label(frame_ticket4, text="Password problems", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_problem4.place(x=276, y=13)
-
-label_icon_user4 = tk.PhotoImage(file="user.png")
-label_icon_user4 = label_icon_user2.subsample(2,2)
-label_user4 = tk.Label(frame_ticket4, image=label_icon_user2, bg="#DFD8D8")
-label_user4.place(x=464, y=8)
-
-label_user4 = tk.Label(frame_ticket4, text="Metz07", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_user4.place(x=500, y=13)
-
-label_icon_date4 = tk.Label(frame_ticket4, text="03/12/2026 08:18", bg="#DFD8D8", fg="#1F2937", font=("century gothic", 8, "bold"))
-label_icon_date4.place(x=665, y=13)
-
-button_priority4 = tk.Button(frame_ticket4, text="High", bg="#FFD104", fg="#000000", width=9, font=("century gothic", 8, "bold"))
-button_priority4.place(x=844, y=13)
-button_priority4.configure(command=lambda: mostrar_menu_priority(button_priority4))
-
-button_status4 = tk.Button(frame_ticket4, text="Resolved", bg="#00B40F", fg="#000000", width=9, font=("century gothic", 8, "bold"))
-button_status4.place(x=950, y=13)
-button_status4.configure(command=lambda: mostrar_menu_status(button_status4))
-
-button_delete4 = tk.Button(frame_ticket4, text="Delete", bg="#A70000", fg="#DFD8D8", width=8, font=("century gothic", 8, "bold"), command=lambda: delete_ticket4(button_delete4))
-button_delete4.place(x=1062, y=13)
-def delete_ticket4(button_delete4):
-    # Preguntar al usuario antes de eliminar
-    confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
-    if confirmacion:
-        frame_ticket4= button_delete4.master
-        frame_ticket4.destroy()
-    else:
-        print("Eliminación cancelada")                
 
 #Añadiendo un título para la pantalla
 label_title = tk.Label(screen1,
@@ -726,7 +642,7 @@ def cambiar_pantalla(event):
         lbl_id.place(x=30, y=25)
 
         # Fecha alineada en la esquina superior derecha
-        lbl_fecha = tk.Label(frame_resultado, text="09 de julio 2026", bg="#55638F", fg="#000000", font=("century gothic", 12, "bold"))
+        lbl_fecha = tk.Label(frame_resultado, text=datos.get('Date'), bg="#55638F", fg="#000000", font=("century gothic", 12, "bold"))
         lbl_fecha.place(x=300, y=35)
 
         # 2.ISSUE 
