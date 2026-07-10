@@ -9,19 +9,15 @@ root.title("Helpdesk")
 root.state("zoomed")
 root.resizable(True,True)
 root.config(bg="#D3D3D3")
- 
 #creando el frame principal
 screen1 = tk.Frame(root, bg="#D3D3D3")
 screen1.pack(fill="both", expand=True)
- 
 #Creando una pestaña para los botones
 frame_menu = tk.Frame(root, height=800, width=150, bg="#040430")
 frame_menu.place(x=0, y=0)
- 
 #Creando un título para la pestaña
 label_tittle = tk.Label(frame_menu, text="HELPDESK", height=2, width=17, bg="#030325", fg="White", font=("century gothic", 11, "bold"), bd=1, relief="solid")
 label_tittle.place(x=0, y=0)
- 
 #Creando el botón para añadir tickets
 def changescreen1():
     pantalla2.pack_forget()
@@ -36,17 +32,15 @@ def go_out(event):
  
 button_new_ticket.bind("<Enter>", log_in)
 button_new_ticket.bind("<Leave>", go_out)
- 
+
 #PANTALLA 2
 pantalla2 = tk.Frame(root, bg="#F3F5F7")
 # Frame principal del formulario
 frame_form = tk.Frame(pantalla2, bg="#F3F5F7", bd=2, relief="groove", width=1360, height=700)
 frame_form.place(x=0, y=0)
- 
 # Encabezado
 header = tk.Label(frame_form, text="NEW TICKET", anchor="center", bg="#55638F", fg="white", font=("Century Gothic",16,"bold"), width=104, height=3)
 header.place(x=0, y=0)
- 
 # User Name
 user_icon = tk.PhotoImage(file="user.png")
 user_icon = user_icon.subsample(2,2)
@@ -70,7 +64,6 @@ label_problem.place(x=310, y=220)
 
 problem_input = tk.Text(frame_form, width=60, height=12, font=("Century Gothic",11), bg="#FCF9F9", fg="#333333", relief="ridge", bd=1)
 problem_input.place(x=550, y=220)
-
 # Prioridad
 priority_icon = tk.PhotoImage(file="priority.png")
 priority_icon = priority_icon.subsample(2,2)
@@ -82,13 +75,7 @@ label_priority = tk.Label(frame_form, text="Priority:", bg="#F3F5F7", font=("Cen
 label_priority.place(x=310, y=464)
 
 priority = tk.StringVar(value="Medium")
-priority_menu = tk.OptionMenu(
-    frame_form,
-    priority,
-    "Low",
-    "Medium",
-    "High",
-    )
+priority_menu = tk.OptionMenu(frame_form, priority, "Low", "Medium", "High",)
 
 def cambiar_color(*args):
     colores = {
@@ -100,19 +87,13 @@ def cambiar_color(*args):
 
     color = colores.get(priority.get(), "white")
 
-    priority_menu.config(
-        bg=color,
-        width=40,
-        font=("Century Gothic",10)
-    )
+    priority_menu.config(bg=color, width=40, font=("Century Gothic",10))
 
 priority.trace_add("write", cambiar_color)
-
 # Pintar el color inicial
 cambiar_color()
 
 priority_menu.place(x=550, y=464)
-
 #Creando una función para guardar los tickets
 def guardar_ticket():
 
@@ -519,8 +500,7 @@ listbox = tk.Listbox(
     screen1,
     width=110,
     height=5,
-    font=("Century Gothic", 10)
-)
+    font=("Century Gothic", 10))
 
 listbox.place_forget()
 
