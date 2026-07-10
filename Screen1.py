@@ -3,7 +3,6 @@ from backend1 import *
 import backend1
 from tkinter import messagebox
 
- 
 #Creando la pantalla
 root = tk.Tk()
 root.title("Helpdesk")
@@ -39,31 +38,13 @@ button_new_ticket.bind("<Enter>", log_in)
 button_new_ticket.bind("<Leave>", go_out)
  
 #PANTALLA 2
-#PANTALLA 2
 pantalla2 = tk.Frame(root, bg="#F3F5F7")
- 
 # Frame principal del formulario
-frame_form = tk.Frame(
-    pantalla2,
-    bg="#F3F5F7",
-    bd=2,
-    relief="groove",
-    width=1360,
-    height=700
-)
+frame_form = tk.Frame(pantalla2, bg="#F3F5F7", bd=2, relief="groove", width=1360, height=700)
 frame_form.place(x=0, y=0)
  
 # Encabezado
-header = tk.Label(
-    frame_form,
-    text="NEW TICKET",
-    anchor="center",
-    bg="#55638F",
-    fg="white",
-    font=("Century Gothic",16,"bold"),
-    width=104,
-    height=3
-)
+header = tk.Label(frame_form, text="NEW TICKET", anchor="center", bg="#55638F", fg="white", font=("Century Gothic",16,"bold"), width=104, height=3)
 header.place(x=0, y=0)
  
 # User Name
@@ -72,23 +53,10 @@ user_icon = user_icon.subsample(2,2)
 user = tk.Label(frame_form, image=user_icon, bg="#F3F5F7")
 user.place(x=270, y=160)
 
-label_user = tk.Label(
-    frame_form,
-    text="User Name:",
-    bg="#F3F5F7",
-    font=("Century Gothic",14)
-)
+label_user = tk.Label(frame_form, text="User Name:", bg="#F3F5F7", font=("Century Gothic",14))
 label_user.place(x=310, y=160)
 
-user_name_input = tk.Entry(
-    frame_form,
-    width=40,
-    font=("Century Gothic",11),
-    bg="#FCF9F9",
-    fg="#333333",
-    relief="ridge",
-    bd=1
-)
+user_name_input = tk.Entry(frame_form, width=40, font=("Century Gothic",11), bg="#FCF9F9", fg="#333333", relief="ridge", bd=1)
 
 user_name_input.place(x=550, y=160)
 # Problem
@@ -97,24 +65,10 @@ problem_icon = problem_icon.subsample(2,2)
 problem = tk.Label(frame_form, image=problem_icon, bg="#F3F5F7")
 problem.place(x=270, y=220)
 
-label_problem = tk.Label(
-    frame_form,
-    text="Problem:",
-    bg="#F3F5F7",
-    font=("Century Gothic",14)
-)
+label_problem = tk.Label(frame_form, text="Problem:", bg="#F3F5F7", font=("Century Gothic",14))
 label_problem.place(x=310, y=220)
 
-problem_input = tk.Text(
-    frame_form,
-    width=60,
-    height=12,
-    font=("Century Gothic",11),
-    bg="#FCF9F9",
-    fg="#333333",
-    relief="ridge",
-    bd=1
-    )
+problem_input = tk.Text(frame_form, width=60, height=12, font=("Century Gothic",11), bg="#FCF9F9", fg="#333333", relief="ridge", bd=1)
 problem_input.place(x=550, y=220)
 
 # Prioridad
@@ -123,12 +77,7 @@ priority_icon = priority_icon.subsample(2,2)
 priority = tk.Label(frame_form, image=priority_icon, bg="#F3F5F7")
 priority.place(x=270, y=464)
 
-label_priority = tk.Label(
-    frame_form,
-    text="Priority:",
-    bg="#F3F5F7",
-    font=("Century Gothic",14),
-   )
+label_priority = tk.Label(frame_form, text="Priority:", bg="#F3F5F7", font=("Century Gothic",14))
 
 label_priority.place(x=310, y=464)
 
@@ -183,7 +132,6 @@ def guardar_ticket():
         user_name_input.delete(0, tk.END)
         problem_input.delete("1.0", tk.END)
 
-    
 
 #Creando el botón para guardar 
 save_button = tk.Button(frame_form, text="GUARDAR", command=guardar_ticket, bg="#36405F", fg="white", font=("Century Gothic",11,"bold"), relief="flat", cursor="hand2", width=34, height=2)
@@ -197,9 +145,7 @@ def changescreen2():
     button_back.place(x=4, y=5)
 
 #PANTALLA 3
-
-# PANTALLA 3 (
-pantalla3 = tk.Frame(root, bg="#d3d3d3")
+pantalla3 = tk.Frame(root, bg="#e9e4e4")
  
 # Creando un botón para que el usuario vea sus tickets
 def changescreen4():
@@ -249,49 +195,23 @@ def mostrar_tickets():
         tarjeta = tk.Frame(pantalla3, bg="white", bd=1, relief="solid")
         tarjeta.pack(padx=40, pady=10, fill="x")
  
-        barra_prioridad = tk.Label(
-            tarjeta,
-            text=prioridad.upper(),
-            bg=color_barra,
-            fg="white",
-            font=("century gothic", 9, "bold")
-        )
+        barra_prioridad = tk.Label(tarjeta, text=prioridad.upper(), bg=color_barra, fg="white", font=("century gothic", 9, "bold"))
         barra_prioridad.pack(fill="x")
  
-        lbl_issue = tk.Label(
-            tarjeta,
-            text=ticket["Issue"],
-            font=("century gothic", 11, "bold"),
-            bg="white",
-            anchor="w",
-            padx=10,
-            pady=5
-        )
+        lbl_issue = tk.Label(tarjeta, text=ticket["Issue"], font=("century gothic", 11, "bold"), bg="white", anchor="w", padx=10, pady=5)
         lbl_issue.pack(anchor="w", fill="x")
  
-        lbl_user = tk.Label(
-            tarjeta,
-            text=f"Responsable: {ticket['User']}",
-            font=("century gothic", 9),
-            bg="white",
-            fg="#555555",
-            anchor="w",
-            padx=10,
-            pady=2
-        )
+        lbl_user = tk.Label(tarjeta, text=f"Responsable: {ticket['User']}", font=("century gothic", 9), bg="white", fg="#555555", anchor="w", padx=10, pady=2)
         lbl_user.pack(anchor="w", fill="x")
  
 # creando boton para regresar a ventana principal
 def changescreen5():
     screen1.pack_forget()
     pantalla3.pack(fill="both", expand=True)
-    button_back2 = tk.Button(pantalla3, text="←", bg="#d3d3d3", fg="black", width=1, height=1, command=lambda:changescreen4() )
-    button_back2.place(x=1, y=50)
+    button_back2 = tk.Button(pantalla3, text="←\n", bg="#55638F", height=4, fg="White", command=lambda:changescreen4() )
+    button_back2.place(x=8, y=13)
  
-
-
-# === BOTÓN CERRAR SESIÓN === #
-
+#BOTÓN PARA CERRAR SESIÓN 
 # Función para salir de la aplicación 
 def cerrar_sesion():
     confirmacion = messagebox.askyesno("LOG OUT", "¿Está seguro de que desea salir del sistema?")
@@ -305,7 +225,7 @@ button_logout = tk.Button(
     text="LOG OUT", 
     height=1, 
     width=17, 
-    bg="#A70000",      
+    bg="#040430",      
     fg="White", 
     font=("century gothic", 11, "bold"), 
     borderwidth=1, 
@@ -314,18 +234,17 @@ button_logout = tk.Button(
     anchor="center", 
     command=cerrar_sesion
 )
-button_logout.place(x=0, y=650) 
+button_logout.place(x=0, y=666) 
 
 def log_in_logout(event):
-    button_logout.config(bg="#7A0000") 
+    button_logout.config(bg="#02021A") 
 def go_out_logout(event):
-    button_logout.config(bg="#A70000") 
+    button_logout.config(bg="#040430") 
 
 button_logout.bind("<Enter>", log_in_logout)
 button_logout.bind("<Leave>", go_out_logout)
 
 mostrar_tickets()
- 
  
 #Creando una pestaña para que el usuario pueda ver sus tickets
 frame_user_tickets = tk.Frame(screen1, height=300, width=1153, bg="#C4C3C3", bd=2, borderwidth=0, relief="groove")
@@ -349,14 +268,10 @@ label_text5.place(x=806, y=0)
 label_text5 = tk.Label(frame_user_tickets, text="Status", font=("Monserrat Black", 9, "bold"), anchor="w", padx=16, height=2, width=26, bg="#55638F")
 label_text5.place(x=949, y=0)
 
-
- 
- 
 #Creando tickets de ejemplo
 frame_ticket1 = tk.Label(frame_user_tickets, height=3, width=166, bg="#DFD8D8", bd=2, borderwidth=1, relief="groove")
 frame_ticket1.place(x=0, y=30)
  
-
 label_document = tk.Label(frame_ticket1,  bg="#DFD8D8")
 label_document.place(x=16, y=8)
  
@@ -612,7 +527,7 @@ entry_search.place(x=180, y=60)
 tickets = []
 
 for i in range(1, 1001):
-    tickets.append(f"#TI-{i:03}")
+    tickets.append(f"{i:03}")
 
 #Creando una lista de sugerencias
 listbox = tk.Listbox(
@@ -683,8 +598,7 @@ entry_search.insert(0, "Insert your ticket ID...")
 entry_search.bind("<FocusIn>", remove_text)
 entry_search.bind("<FocusOut>", add_text)
 
-# === PANTALLA 4 ===  #
-
+#PANTALLA 4
 pantalla4 = tk.Frame(root, bg="#d3d3d3")
 
 def changescreen6():
@@ -716,8 +630,6 @@ def cambiar_pantalla(event):
         button_back3.place(x=20, y=50)
 
       # DESING #
-        
-
         frame_resultado = tk.Frame(pantalla4, bg="#55638F", bd=0, highlightthickness=1, highlightbackground="#434F74", relief="flat", width=450, height=430)
         frame_resultado.place(x=450, y=120)
 
@@ -737,7 +649,6 @@ def cambiar_pantalla(event):
         lbl_issue.place(x=30, y=135, width=390, height=110)
 
         # 3.USER
-
         lbl_user_title = tk.Label(frame_resultado, text="USER:", bg="#55638F", fg="#000000", font=("century gothic", 12, "bold"))
         lbl_user_title.place(x=30, y=260)
 
@@ -749,7 +660,6 @@ def cambiar_pantalla(event):
         line.place(x=70, y=300)
 
         # 5.BOTONES
-
         #priority
         def selecionar_opcion2(boton_selecionado2, texto_selecionado2, color_selecionado2):
             boton_selecionado2.configure(text=f"{texto_selecionado2}", bg=color_selecionado2, activebackground=color_selecionado2)
@@ -774,7 +684,6 @@ def cambiar_pantalla(event):
         menu_opciones_priority.add_command(label="Medium", command=lambda: selecionar_opcion2(button_priority, "Medium", "#FF8E0D"))
         menu_opciones_priority.add_command(label="Low", command=lambda: selecionar_opcion2(button_priority, "Low", "#00B40F"))
 
-
       #status
         def selecionar_opcion(boton_selecionado, texto_selecionado, color_selecionado):
             boton_selecionado.configure(text=f"{texto_selecionado}", bg=color_selecionado, activebackground=color_selecionado)
@@ -796,9 +705,7 @@ def cambiar_pantalla(event):
         menu_opciones_status.add_command(label="In progress", command=lambda: selecionar_opcion(button_status, "In progress", "#FF8E0D"))
         menu_opciones_status.add_command(label="Resolved", command=lambda: selecionar_opcion(button_status, "Resolved", "#00B40F"))
 
-
         #DELETE
-
         def delete_ticket_p4(button_del):
             confirmacion = messagebox.askyesno("elimination", "Do you want to eliminate this ticket?")
             if confirmacion:
@@ -813,7 +720,6 @@ def cambiar_pantalla(event):
         button_delete = tk.Button(frame_resultado, text="Delete", bg="#A70000", fg="#DFD8D8", width=10, bd=0, font=("century gothic", 8, "bold"), command=lambda: delete_ticket_p4(button_delete))
         button_delete.place(x=320, y=345)
 
-
         # Cambio de pantallas
         screen1.pack_forget()                      
         pantalla4.pack(fill="both", expand=True)   
@@ -827,7 +733,5 @@ def cambiar_pantalla(event):
 
 # Buscar mediante tecla "ENTER"
 entry_search.bind("<Return>", cambiar_pantalla)
-
-
 
 root.mainloop()
